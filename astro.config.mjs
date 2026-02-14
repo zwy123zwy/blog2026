@@ -25,9 +25,10 @@ import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
 
 // https://astro.build/config
+// GitHub Pages: 将下面改为你的用户名和仓库名，例如 https://<用户名>.github.io，base: '/<仓库名>/'
 export default defineConfig({
-	site: "https://fuwari.vercel.app/",
-	base: "/",
+	site: "https://zwy123zwy.github.io",
+	base: "/blog2026/",
 	trailingSlash: "always",
 	integrations: [
 		tailwind({
