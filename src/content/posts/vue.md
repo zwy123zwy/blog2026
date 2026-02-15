@@ -6,7 +6,7 @@ image: ''
 tags: []
 category: ''
 draft: false 
-lang: ''
+lang: 'zh-cn'
 ---
 
 ## Vue3 和 Vue2 的区别有哪些？说几个主要的
