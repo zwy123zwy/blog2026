@@ -1,6 +1,6 @@
 ---
 title: JavaScript 对象
-published: 2025-02-15
+published: 2025-02-26
 description: 'JavaScript 对象：定义、存储类型、常见 API、创建过程、浅拷贝与深拷贝、原型与原型链、继承方式'
 image: ''
 tags: [JavaScript, 对象]

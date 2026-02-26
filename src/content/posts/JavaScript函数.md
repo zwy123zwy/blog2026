@@ -1,6 +1,6 @@
 ---
 title: JavaScript 函数
-published: 2025-02-15
+published: 2025-02-26
 description: 'JavaScript 函数：定义方式、执行上下文、this、作用域（按红宝书逻辑梳理）'
 image: ''
 tags: [JavaScript, 函数]
