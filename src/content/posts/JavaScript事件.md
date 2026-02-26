@@ -1,6 +1,6 @@
 ---
 title: JavaScript 事件
-published: 2026-02-15
+published: 2025-02-15
 description: 'JavaScript 事件：绑定方式、常见问题与方案、事件机制、冒泡与捕获、事件委托'
 image: ''
 tags: [JavaScript, 事件, DOM]

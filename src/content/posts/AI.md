@@ -1,6 +1,6 @@
 ---
 title: AI
-published: 2026-02-15
+published: 2025-02-15
 description: 'AI 应用方向面试知识框架：大模型、RAG、Agent、提示工程、评估与工程实践'
 image: ''
 tags: [AI, 大模型, RAG, LLM, 面试]
