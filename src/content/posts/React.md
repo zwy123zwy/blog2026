@@ -21,6 +21,225 @@ lang: 'zh-cn'
 - 声明式界面编程（Declarative UI）
 - 响应式 DOM 更新机制（Reactive DOM updates）
 
+## React 面试核心考点速览
+
+> 本小节从面试视角梳理 React 的高频考点，并把后文对应的核心内容浓缩到这里，配合示意图便于记忆。
+
+### 1. React 核心理念
+
+**一句话理解**：React 让你用“描述 UI 长什么样”的方式写界面，数据只从父到子流动，更新交给框架处理。
+
+- **声明式 vs 命令式**
+  - **命令式（原生 JS）**：先查 DOM（如 `getElementById`），再改内容（`innerText`、`classList`）、增删节点（`appendChild` / `removeChild`），每一步都要自己写。
+  - **声明式（React）**：用 JSX 描述“当前状态下的 UI”；状态一变，调用 `setState` / `useState`，React 负责对比虚拟 DOM、算出最小变更并更新真实 DOM。
+- **组件化**：界面是一棵组件树，每个组件封装自己的视图、状态和逻辑，可组合、可复用。
+- **单向数据流**：数据从父组件经 **props** 流向子组件；子组件想改“上面的数据”只能通过父组件传下来的**回调**通知父组件，由父组件改 state，再通过 props 传下来。这样数据来源清晰，便于调试。
+
+下图对比了“命令式原生 JS”与“声明式 React”的流程，以及 React 中从状态到 DOM 的单向数据流。
+
+![声明式 vs 命令式 & 单向数据流](./image/react-core-idea-flow.png)
+
+后文可结合 **React setState 调用的原理** 中的 `./img/image.png` 进一步理解“状态变更 → 调度 → 渲染”的完整链路。
+
+---
+
+### 2. JSX 本质
+
+**一句话理解**：JSX 是写起来像 HTML 的语法糖，编译后变成 `React.createElement` 调用，得到的就是虚拟 DOM 对象。
+
+- **JSX 语法规则**：标签名、驼峰属性（如 `className`、`onClick`）、子节点写在标签之间；表达式用 `{}`。
+- **编译过程**：构建时 Babel（或等价工具）把 JSX 转成 `createElement(type, props, ...children)`；执行后得到一棵由普通 JS 对象组成的树（虚拟 DOM），包含 `type`、`props`、`key`、`ref` 等字段。
+- **和 HTML 的区别**：属性名用驼峰、部分属性名不同（如 `class` → `className`）、事件传函数而非字符串；组件名大写，最终都会变成对 `createElement` 的调用。
+
+下图是“JSX → Babel → createElement → 虚拟 DOM → 真实 DOM”的完整转换链。
+
+![JSX 编译与虚拟 DOM 转换流程](./image/react-jsx-pipeline.png)
+
+文中 **三个API** 里 `React.createElement` 示例下的 `./img/3058803936-1121353711213220_fix732.png` 展示了单个虚拟 DOM 对象的结构（`$$typeof`、`type`、`props`、`children` 等），可对照理解。
+
+---
+
+### 3. 组件基础
+
+**一句话理解**：函数组件用 Hooks 管状态和副作用，类组件用 this.state 和生命周期；数据父传子靠 props，子传父靠回调。
+
+- **函数组件 vs 类组件**
+  - **函数组件**：一个接收 `props`、返回 JSX 的函数；无 this，用 `useState`、`useEffect` 等 Hooks 管理状态和副作用；写法简单，官方推荐，2026 年面试仍常考与类组件的对比与迁移。
+  - **类组件**：继承 `React.Component`，用 `this.state` 和 `this.setState`，有完整生命周期（见下一节）；需要理解 this 绑定。
+- **props / state**：**props** 由父组件传入，只读；**state** 是组件内部状态，用 `setState`（类）或 `useState`（函数）更新，更新后触发重新渲染。
+- **组件通信**：**父→子**：通过 props 传数据或回调；**子→父**：调用父组件通过 props 传下来的回调；兄弟或跨层级可借助共同父节点、Context 或 Redux 等。
+
+下图概括了父子组件之间“props 向下、回调向上”的数据流。
+
+![父子组件通信：props 向下，回调向上](./image/react-component-communication.png)
+
+更多方式（兄弟、跨层级、发布订阅、全局状态）见后文 **组件通信** 相关小节。
+
+---
+
+### 4. 生命周期（类组件 & Hooks）
+
+**一句话理解**：类组件有挂载、更新、卸载三阶段和对应钩子；函数组件没有生命周期，用 `useEffect` 的依赖数组和清理函数来“等效”实现。
+
+- **类组件生命周期**
+  - **挂载**：`constructor` → `getDerivedStateFromProps` → `render` → `componentDidMount`。
+  - **更新**：`getDerivedStateFromProps` → `shouldComponentUpdate` → `render` → `getSnapshotBeforeUpdate` → `componentDidUpdate`。
+  - **卸载**：`componentWillUnmount`。
+  - 注意：`componentWillMount` 等已废弃，原因与异步渲染下的安全性有关。
+- **useEffect 对应关系**
+  - `useEffect(fn, [])`：只在挂载后执行一次，可对应 **componentDidMount**。
+  - `useEffect(fn, [a, b])`：挂载后执行，且每当依赖 `a`、`b` 变化时再执行，可对应 **componentDidUpdate** 的“某依赖变化”逻辑。
+  - `useEffect(() => { return () => { /* 清理 */ }; }, [])`：清理函数在卸载时执行，可对应 **componentWillUnmount**。
+
+下图把类组件各阶段与上述 useEffect 写法做了对应，便于记忆。
+
+![类组件生命周期与 useEffect 对应关系](./image/react-lifecycle-useeffect-map.png)
+
+更细的类组件顺序与用法见后文 **# 生命周期**，以及图中的 `./img/image-20240225161622185.png`、`./img/image1111111.png` 等。
+
+---
+
+### 5. 虚拟 DOM & Diff 算法
+
+**一句话理解**：虚拟 DOM 是用 JS 对象描述的“理想 DOM 树”；Diff 在同层比较、配合 key，算出最小变更再更新真实 DOM。
+
+- **虚拟 DOM 是什么**：用轻量 JS 对象（如 `{ type, props, children }`）表示 DOM 结构；先在内存里对比两棵虚拟 DOM 树，得到差异（patch），再对真实 DOM 做最小化更新，避免整树替换。
+- **React Diff 核心规则**
+  - **同层比较**：只比较同一层级的节点，不跨层对比，复杂度约 O(n)。
+  - **key 的作用**：列表里用稳定的 key（如 id）让 React 识别“同一个元素”，从而复用实例和 DOM、只做移动或内容更新；无 key 或用 index 作 key 在顺序变化时可能导致不必要的重建和状态错乱。
+  - **类型不同则替换**：节点类型变了（如 div → span），直接替换整棵子树；类型相同则复用并比较属性与子节点。
+
+下图概括了“旧/新虚拟 DOM 同层比较 + key 匹配”，以及列表中有 key / 无 key 时 DOM 更新的差异。
+
+![虚拟 DOM 与 Diff：同层比较与 key 的作用](./image/react-vdom-diff-key.png)
+
+后文 **React 渲染**、**Diff 算法核心原则** 及 `./img/v2-8c3b88ee7471ba1303c4460967da36fa_1440w.png` 等图有更细的 Fiber 与 Diff 说明。
+
+---
+
+### 6. Hooks 全解析（重点）
+
+**一句话理解**：Hooks 让函数组件拥有状态、副作用和复用逻辑的能力，是 2026 年 React 面试绝对核心。  
+
+- **基础 Hooks（三大金刚）**
+  - `useState`：在函数组件中存状态，注意初始值只在首次渲染用到，多次 `setState` 可能被批量合并。
+  - `useEffect`：处理“副作用”（请求、订阅、操作 DOM 等），依赖数组控制“何时重新执行”，返回的函数负责清理。
+  - `useContext`：消费上层 `Context.Provider` 提供的共享数据，用来处理“主题、登录信息、语言”等全局性配置。
+- **进阶 Hooks（按用途记）**
+  - **状态管理**：`useReducer` 用“dispatch + reducer”管理复杂状态，适合多字段、状态机场景，是 Redux 思路的缩小版。
+  - **性能优化**：`useCallback` 记忆“函数引用”，`useMemo` 记忆“计算结果”，都依赖依赖数组；错误使用会导致“处处加 memo 反而更慢”。
+  - **DOM 操作**：`useRef` 保存可变引用（DOM 节点或任意值），变更不会触发渲染；`useLayoutEffect` 在浏览器绘制前同步执行，适合读写布局、避免闪屏，但要避免做重活阻塞渲染。
+- **自定义 Hook 规范**
+  - 命名必须以 `use` 开头（如 `useUser`, `useFetchList`），内部可以调用其他 Hooks。
+  - 封装“可复用的状态逻辑”，通常返回“数据 + 方法”，由调用者决定 UI 怎么写。
+  - 遵守 Hooks 规则：只能在函数顶层调用，不要在条件、循环、嵌套函数里调用。
+- **Hooks 闭包陷阱（高频考点）**
+  - 问题本质：回调函数“记住了创建当时的 state/props”，异步执行时拿到的是“旧值”（stale value）。
+  - 典型场景：定时器、订阅回调、事件处理里多次依赖旧 state 却没有把 state 放进依赖数组。
+  - 典型修复：把依赖放入 `useEffect` / `useCallback` 的依赖数组，或用函数式 `setState(prev => ...)`。
+
+下图把基础/进阶 Hooks、自定义 Hook 规范以及闭包陷阱的执行时序放在一张图里，适合作为 Hooks 总览速记。  
+
+![React Hooks 全解析总览图](./image/react-hooks-overview.png)
+
+---
+
+### 7. 状态管理
+
+**一句话理解**：组件内部用 `useState`，中小型共享状态可以用 Context + `useReducer`，更复杂或需要调试工具时再上 Redux Toolkit，轻量场景可选 Zustand/Jotai。  
+
+- **React Context + useReducer 基础方案**
+  - 通过 `const [state, dispatch] = useReducer(reducer, initialState)` 管理状态，再用 `Context.Provider` 把 `{ state, dispatch }` 向下传。
+  - 适合“登录信息、主题、当前项目”等中小范围的共享状态，不想额外引入库时首选。
+- **Redux 生态（推荐使用 Redux Toolkit）**
+  - 通过 `createSlice` 定义 `name`、`initialState` 和 `reducers`，自动生成 action 和 reducer。
+  - 配合 `configureStore`、`useSelector`、`useDispatch`，能获得优秀的开发工具支持（时间旅行、状态快照、强类型）和成熟社区生态。
+- **Zustand / Jotai 等轻量方案**
+  - Zustand：函数式定义 store，然后在组件中通过 hook 读取/更新，默认支持选择器和浅比较，使用体验接近“局部全局变量 + Hook”。
+  - Jotai：以 atom 为最小状态单元，组件通过 `useAtom` 直接读写，组合灵活，适合更细粒度的状态拆分。
+- **选型思路**
+  - 页面和数据简单：能用 `useState` / `useReducer` 就不要上库。
+  - 中小型应用的少量全局状态：Context + `useReducer` 或 Zustand/Jotai。
+  - 大型项目、多团队协作、需要完善调试工具：优先 Redux Toolkit。
+
+下图对比了 Context + `useReducer`、Redux Toolkit 和 Zustand/Jotai 的核心流程和适用场景。  
+
+![React 状态管理选型与流程对比](./image/react-state-management-compare.png)
+
+---
+
+### 8. 组件复用
+
+**一句话理解**：HOC 和 Render Props 是“旧时代”的复用方案，现在更推荐用自定义 Hooks 把“逻辑”从“视图”中抽离出来。  
+
+- **HOC（高阶组件）**
+  - 形式：`const Enhanced = withSomething(WrappedComponent)`，通过包一层组件增强 props 或注入能力。
+  - 优点：逻辑与 UI 清晰分离、可叠加复用。
+  - 缺点：容易形成“组件嵌套地狱”，props 命名冲突不易发现，调试时组件树层级很深。
+- **Render Props**
+  - 形式：组件接收一个 `render` 或 `children` 函数，通过调用该函数把数据“反向”交给外部渲染。
+  - 优点：极其灵活，UI 完全交给使用者决定。
+  - 缺点：层层嵌套时容易出现“回调地狱”，JSX 可读性下降。
+- **自定义 Hooks（2026 主流）**
+  - 逻辑层：把“数据获取、订阅、表单状态、动画”等抽到 `useXxx` 中。
+  - 视图层：多个组件可以各自使用同一个 Hook，按需渲染 UI，而不用共享一段布局。
+  - 优点：复用纯逻辑、组合简单、类型推导友好；缺点是需要理解好 Hooks 规则和闭包语义。
+
+下图总结了 HOC、Render Props 与自定义 Hooks 三种模式的结构与优劣对比。  
+
+![组件复用模式对比：HOC / Render Props / 自定义 Hooks](./image/react-reuse-patterns.png)
+
+---
+
+### 9. 性能优化
+
+**一句话理解**：先用工具找“慢组件”，再针对性使用 memo 化、虚拟列表、懒加载等手段，避免一上来无脑到处加 `useMemo`。  
+
+- **渲染优化：memo / useCallback / useMemo**
+  - `React.memo`：记忆整个函数组件的渲染结果，props 不变就跳过重渲。
+  - `useCallback(fn, deps)`：记忆函数引用，主要减少子组件因为“接收了新函数”而重新渲染。
+  - `useMemo(factory, deps)`：记忆计算结果，适合昂贵计算或依赖大对象进行比较的场景。
+- **列表优化：key & 虚拟列表**
+  - 合理使用 `key`，保证列表重排时元素能被正确复用，避免无谓卸载/挂载造成抖动。
+  - 长列表使用虚拟列表库（如 `react-window`、`react-virtualized`），只渲染可视区域，提高滚动性能。
+- **懒加载：React.lazy + Suspense**
+  - 使用 `React.lazy(() => import('./SomePage'))` 按需加载页面或大组件。
+  - 配合 `<Suspense fallback={<Spinner />}>` 展示加载占位，减少首屏包体积。
+- **性能检测：React DevTools Profiler**
+  - 使用 Profiler 录制一次交互，查看每次 commit 的耗时、具体是哪些组件在频繁渲染。
+  - 把“猜哪里慢”变成“用数据说话”，再决定是否需要 memo 化或重构状态结构。
+
+下图把记忆化、虚拟列表、懒加载和 Profiler 火焰图放在一张“性能可视化”示意图中，有助于形成整体思维。  
+
+![React 性能优化可视化示意图](./image/react-performance-optimization.png)
+
+---
+
+### 10. 路由（React Router v7）
+
+**一句话理解**：React Router v7 主推“路由即配置 + 组件”，支持嵌套路由、数据加载、懒加载和路由级鉴权，是 SPA 必考点。  
+
+- **路由配置方式**
+  - 声明式：在 JSX 中写 `<Routes><Route path=\"/\" element={<Home />} /></Routes>`。
+  - 编程式：通过 `useNavigate` 在代码里跳转；`navigate('/detail/123')`、`navigate(-1)` 等。
+- **动态路由 / 嵌套路由**
+  - 动态段：如 `path=\"/users/:id\"`，组件中通过 `useParams()` 读取 `id`。
+  - 嵌套路由：父路由负责整体布局（头部、侧边栏），子路由在 `<Outlet />` 中展示具体页面。
+- **路由守卫 / 鉴权**
+  - 常见写法：封装 `RequireAuth` 组件，在其中读取登录状态，未登录时重定向到登录页。
+  - 也可以在 loader / action 中做鉴权，根据结果返回不同的响应或重定向。
+- **路由参数（params / search / state）**
+  - `params`：路径参数，如 `/users/:id`。
+  - `search`：查询参数，通过 `useSearchParams` 读写，如 `?q=react`。
+  - `state`：不暴露在 URL 中的导航状态，通过 `navigate('/path', { state })` 传递，目标页用 `useLocation()` 读取。
+- **懒加载路由**
+  - 与组件懒加载类似：`const Page = React.lazy(() => import('./Page'))`。
+  - 与 `<Suspense fallback={...}>` 结合，在路由级别实现按需加载。
+
+下图展示了嵌套路由与页面布局的关系、简单的鉴权流程图，以及 params / search / state 的对比和路由级懒加载示意。  
+
+![React Router v7 核心能力概览图](./image/react-router-v7-flow.png)
+
 ## HelloWorld
 
 React的常规开发方式并不是通过浏览器引入外部js脚本来使用，但在入门阶段我们暂且先使用这种方式来简单体会一下React。
