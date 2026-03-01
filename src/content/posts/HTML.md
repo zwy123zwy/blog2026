@@ -1,6 +1,6 @@
 ---
 title: HTML
-published: 2026-02-26
+published: 2026-03-01
 description: 'HTML 文档结构、语义化、src/href、script 加载、meta、表单、存储、Canvas/SVG、面试考点'
 image: ''
 tags: [HTML, 前端基础, 语义化, 可访问性, SEO]
