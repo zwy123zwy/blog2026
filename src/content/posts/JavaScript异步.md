@@ -1,6 +1,6 @@
 ---
 title: JavaScript 异步
-published: 2025-02-26
+published: 2026-02-26
 description: 'JavaScript 异步：为什么需要异步、回调地狱、Promise、手写 Promise、Promise A+、async/await、异步场景与策略'
 image: ''
 tags: [JavaScript, 异步, Promise]

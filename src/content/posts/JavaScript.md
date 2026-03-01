@@ -1,6 +1,6 @@
 ---
 title: JavaScript
-published: 2025-02-26
+published: 2026-02-26
 description: 'JavaScript 文件的执行过程：编译阶段与执行阶段，引擎与宿主、事件循环'
 image: ''
 tags: [JavaScript]
