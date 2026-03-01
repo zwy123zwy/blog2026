@@ -111,7 +111,7 @@ p:first-child { color: red; }
 
 通过 `box-sizing: content-box | border-box` 控制；常用全局 `* { box-sizing: border-box; }`。
 
-![标准盒模型与 border-box](image\CSS55Generated_image.png)
+![标准盒模型与 border-box](image/CSS55Generated_image.png)
 
 ### 12. 为什么用 translate 改位置而不是定位？
 
@@ -370,7 +370,7 @@ ul { display: grid; grid-template-columns: 30% 30% 30%; grid-template-rows: 30% 
 
 从下到上：背景和边框 → 负 z-index → 块级盒（文档流）→ 浮动盒 → 行内盒 → z-index:0 → 正 z-index。
 
-![层叠顺序](image\css-Generated_image.png)
+![层叠顺序](image/css-Generated_image.png)
 
 ### 6. position 的属性与区别
 
