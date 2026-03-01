@@ -111,7 +111,7 @@ p:first-child { color: red; }
 
 通过 `box-sizing: content-box | border-box` 控制；常用全局 `* { box-sizing: border-box; }`。
 
-![标准盒模型与 border-box](C:\Users\Zhangwenye\Desktop\2026\blog2026\src\content\posts\image\CSS55Generated_image.png)
+![标准盒模型与 border-box](image\CSS55Generated_image.png)
 
 ### 12. 为什么用 translate 改位置而不是定位？
 
