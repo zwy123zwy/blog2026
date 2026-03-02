@@ -41,16 +41,16 @@ lang: 'zh-cn'
 - **枚举**：`enum Color { Red, Green }`（数字/字符串枚举）。
 
 ```typescript
-// 基础示例
-let name: string = 'ts';
-function greet(msg: string): string {
+// 基础示例：类型注解与接口
+let name: string = 'ts';                    // 变量注解
+function greet(msg: string): string {       // 参数与返回值注解
   return `Hello, ${msg}`;
 }
-interface User {
+interface User {                            // 描述对象形状，可选属性用 ?
   id: number;
   name: string;
 }
-const u: User = { id: 1, name: 'Tom' };
+const u: User = { id: 1, name: 'Tom' };     // 赋值时必须满足接口形状
 ```
 
 #### 进阶要点
@@ -75,22 +75,33 @@ const u: User = { id: 1, name: 'Tom' };
    - 推荐 `unknown`：在接收外部输入（JSON、API、用户输入）时用 `unknown`，收窄后再用，避免把“未验证的数据”当成确定类型导致运行时错误。
 
 3. **interface 和 type 的区别？什么场景必须用 type？**
-   - **相同点**：都可描述对象形状，都可 extends（interface 用 extends，type 用交叉 `&`）。
-   - **不同点**：
-     - **声明合并**：同名 `interface` 会合并，`type` 不可重复定义；为库做扩展时常用 `interface` 让用户声明合并。
-     - **表达能力**：`type` 可表达联合 `A | B`、元组 `[string, number]`、字面量联合 `'a' | 'b'`、映射类型、条件类型、从 typeof 推导等；`interface` 只能描述对象形状（及函数调用签名）。
-   - **必须用 type 的场景**：联合类型、交叉多个接口以外的复杂类型、需要条件类型/ infer 时、需要从值推导类型时。
-
+   - **相同点**：都可描述对象形状，都可 extends（interface 用 extends，type 用交叉 `&`）；描述函数、可调用对象时两者都能写。
+   - **不同点（写详细）**：
+     - **声明合并**：同名 `interface` 会**自动合并**，同名 `type` 会报错“重复标识符”。因此为库做扩展（如给 Window、Express Request 加属性）时用 `interface`，用户可在自己的 .d.ts 里再写一遍同名 interface 做扩展。
+       ```typescript
+       // 声明合并：同名 interface 会合并，常用于扩展全局或库类型
+       interface Window { myApp: string; }
+       interface Window { version: number; }  // 合法，合并为 { myApp: string; version: number }
+       type Window = { x: number };            // 错误：type 不可重复定义
+       ```
+     - **表达能力**：
+       - **interface**：只能描述对象形状（含可选、只读、索引签名）、函数调用签名 `(x: number) => string`、构造签名等；不能直接写联合、元组、字面量联合、映射类型、条件类型。
+       - **type**：可写联合 `A | B`、元组 `[string, number]`、字面量联合 `'a' | 'b'`、映射类型 `{ [K in keyof T]: T[K] }`、条件类型 `T extends U ? X : Y`、`infer`、以及从值推导 `typeof obj`。还可对接口做交叉 `InterfaceA & InterfaceB`。
+     - **继承/扩展**：interface 用 `extends A, B` 可多继承；type 用交叉 `A & B`。interface 可 extends 一个 type 别名（只要该 type 是对象形状）；type 可 `&` 多个 interface。
+     - **性能与错误提示**：在复杂项目中，interface 在错误提示里有时更直观（显示接口名）；type 别名在递归、条件类型过深时可能提示为展开后的长类型。
+   - **必须用 type 的场景**：联合类型、元组、字面量联合、映射类型、条件类型/ infer、从 typeof/实例类型推导、需要“从已有类型计算新类型”的体操。若只是描述一个对象形状且可能需要声明合并，用 interface 更合适。
+   
 4. **类型守卫有哪些？自定义类型守卫的签名为什么是 `x is Type`？**
    - 内置：`typeof`（仅限 number/string/boolean/symbol/undefined/function/object）、`instanceof`、`in`。
    - **自定义类型守卫**：函数返回 `arg is Type`，在条件为真时编译器将参数收窄为 `Type`。若写成 `boolean`，编译器不会收窄，仅保留布尔判断。
    ```typescript
+   // 自定义类型守卫：返回 x is string 时，在 if 分支内 TS 会把 x 收窄为 string
    function isString(x: unknown): x is string {
      return typeof x === 'string';
    }
    function f(x: unknown) {
      if (isString(x)) {
-       // x 被收窄为 string
+       // x 被收窄为 string，可安全调用字符串方法
        console.log(x.toUpperCase());
      }
    }
@@ -104,13 +115,14 @@ const u: User = { id: 1, name: 'Tom' };
    - 多个类型用**相同字面量字段**区分，形成联合类型，在分支里按该字段收窄，使每个分支类型确定。
    - 解决：普通联合 `A | B` 在分支内仍可能混用，难以精确推断；可辨识联合 + switch/if 可穷举且类型安全。
    ```typescript
-   type Result = 
+   // 可辨识联合：用 kind 字面量区分，switch 时每个 case 内类型自动收窄
+   type Result =
      | { kind: 'ok'; data: string }
      | { kind: 'err'; message: string };
    function handle(r: Result) {
      switch (r.kind) {
        case 'ok': return r.data;   // r 收窄为 { kind: 'ok'; data: string }
-       case 'err': return r.message;
+       case 'err': return r.message; // r 收窄为 { kind: 'err'; message: string }
      }
    }
    ```
@@ -132,12 +144,14 @@ const u: User = { id: 1, name: 'Tom' };
 - **泛型**：类型参数化，写一次逻辑，多种类型复用；避免 `any`，保持类型安全。
 
 ```typescript
+// 泛型 T 在调用时由实参推断，保留入参与返回的类型关联
 function identity<T>(x: T): T {
   return x;
 }
-identity<number>(1);        // number
-identity('hello');          // 推断为 string
+identity<number>(1);        // 显式指定 T=number，返回 number
+identity('hello');          // 推断 T=string，返回 string
 
+// 泛型接口：Box 的 value 类型由类型参数决定
 interface Box<T> {
   value: T;
 }
@@ -147,6 +161,7 @@ const box: Box<string> = { value: 'hi' };
 - **泛型约束**：`extends` 限制类型参数必须满足某形状。
 
 ```typescript
+// K extends keyof T 保证 key 一定是 T 的键，返回类型为 T[K] 索引访问类型
 function getProp<T, K extends keyof T>(obj: T, key: K): T[K] {
   return obj[key];
 }
@@ -164,11 +179,12 @@ function getProp<T, K extends keyof T>(obj: T, key: K): T[K] {
 - **内置工具类型**：`Partial<T>`、`Required<T>`、`Readonly<T>`、`Pick<T, K>`、`Omit<T, K>`、`Record<K, V>`、`Exclude<T, U>`、`Extract<T, U>`、`NonNullable<T>`、`ReturnType<T>`、`Parameters<T>` 等。
 
 ```typescript
-// 条件类型 + infer 示例
+// 条件类型 + infer：匹配函数签名，在 true 分支用 infer R 推断返回值类型
 type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+// 同理 infer P 推断参数元组类型
 type Params<T> = T extends (...args: infer P) => any ? P : never;
 
-// 映射类型示例
+// 映射类型：K in keyof T 遍历 T 的所有键，? 表示可选，readonly 表示只读
 type Partial<T> = { [K in keyof T]?: T[K] };
 type Readonly<T> = { readonly [K in keyof T]: T[K] };
 ```
@@ -196,20 +212,57 @@ type Readonly<T> = { readonly [K in keyof T]: T[K] };
 
 5. **infer 在条件类型里怎么用？手写 ReturnType、Parameters、Promise 解包。**
    - **infer**：在条件类型的 extends 子句中声明**类型变量**，由编译器在匹配时推断。只能出现在 true 分支。
-   - **ReturnType**：从函数类型推断返回值。  
-     `type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;`
-   - **Parameters**：从函数类型推断参数元组。  
-     `type Parameters<T> = T extends (...args: infer P) => any ? P : never;`
-   - **Promise 解包**：若 T 是 Promise<X> 则得到 X，否则保持 T。  
-     `type Awaited<T> = T extends Promise<infer R> ? Awaited<R> : T;`（递归解多层 Promise）
+   - 手写实现示例：
+
+   ```typescript
+   // ReturnType：匹配“任意参数、返回某类型”的函数，infer R 取出返回值类型；非函数则 never
+   type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
+
+   // Parameters：infer P 放在参数位置，取出参数元组类型
+   type Parameters<T> = T extends (...args: infer P) => any ? P : never;
+
+   // Awaited：若 T 是 Promise<R> 则递归解包 R（支持 Promise<Promise<number>>）；否则返回 T
+   type Awaited<T> = T extends Promise<infer R> ? Awaited<R> : T;
+
+   // 使用示例：typeof f 取得函数 f 的类型，再交给上述工具类型
+   declare function f(a: number, b: string): boolean;
+   type R = ReturnType<typeof f>;       // boolean
+   type P = Parameters<typeof f>;        // [number, string]
+   type X = Awaited<Promise<Promise<number>>>;  // number
+   ```
 
 6. **手写 Partial、Required、Readonly、Pick、Omit、Record 的思路与实现。**
-   - **Partial**：所有属性变可选。`type Partial<T> = { [K in keyof T]?: T[K] };`
-   - **Required**：所有可选变必选。`type Required<T> = { [K in keyof T]-?: T[K] };`（`-?` 去掉可选）
-   - **Readonly**：所有属性只读。`type Readonly<T> = { readonly [K in keyof T]: T[K] };`
-   - **Pick**：只保留指定键。`type Pick<T, K extends keyof T> = { [P in K]: T[P] };`
-   - **Omit**：排除指定键。`type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;`
-   - **Record**：键类型 K 到值类型 V 的映射。`type Record<K extends keyof any, V> = { [P in K]: V };`
+   - 思路：用映射类型 `[K in keyof T]` 遍历键，用修饰符 `?`、`-?`、`readonly` 和 `Pick`/`Exclude` 组合实现。
+   - 手写实现：
+
+   ```typescript
+   // Partial：[K in keyof T] 遍历 T 的键，? 使每个属性变为可选
+   type Partial<T> = { [K in keyof T]?: T[K] };
+
+   // Required：-? 移除可选修饰符，使所有属性必选
+   type Required<T> = { [K in keyof T]-?: T[K] };
+
+   // Readonly：为每个属性加上 readonly
+   type Readonly<T> = { readonly [K in keyof T]: T[K] };
+
+   // Pick：只保留 K 中的键，[P in K] 且 K extends keyof T 保证 P 来自 T
+   type Pick<T, K extends keyof T> = { [P in K]: T[P] };
+
+   // Omit：从 keyof T 中排除 K，再用 Pick 取剩余键
+   type Omit<T, K extends keyof any> = Pick<T, Exclude<keyof T, K>>;
+
+   // Record：K 的每个成员作为键，值类型均为 V
+   type Record<K extends keyof any, V> = { [P in K]: V };
+
+   // 使用示例
+   interface User { id: number; name: string; age?: number; }
+   type PartialUser = Partial<User>;     // 所有属性可选
+   type RequiredUser = Required<User>;   // age 也变为必选
+   type ReadonlyUser = Readonly<User>;   // 所有属性只读
+   type NameOnly = Pick<User, 'name'>;   // 仅 { name: string }
+   type NoAge = Omit<User, 'age'>;       // 去掉 age
+   type Dict = Record<'a' | 'b', number>; // { a: number; b: number }
+   ```
 
 7. **什么是协变、逆变、双变？函数参数为什么是逆变的？**
    - **协变**：子类型可赋给父类型。如 `Dog` 是 `Animal` 的子类型，则 `Array<Dog>` 可赋给 `Array<Animal>`（只读场景安全）。
@@ -230,13 +283,13 @@ type Readonly<T> = { readonly [K in keyof T]: T[K] };
 - 在 TypeScript 中需在 `tsconfig.json` 中开启 `"experimentalDecorators": true`（以及可选 `"emitDecoratorMetadata": true`），且当前仍是实验特性；ECMAScript 的装饰器提案尚未完全定稿，TS 实现随标准演进。
 
 ```typescript
-// 类装饰器
+// 类装饰器：第一个参数是构造函数，可修改或包装类
 function sealed(constructor: Function) {
-  Object.seal(constructor);
-  Object.seal(constructor.prototype);
+  Object.seal(constructor);           // 密封构造函数，防止动态增删属性
+  Object.seal(constructor.prototype); // 密封原型
 }
 
-@sealed
+@sealed  // 装饰器在类定义时执行，而非实例化时
 class Greeter {
   greeting: string;
   constructor(msg: string) {
@@ -253,13 +306,14 @@ class Greeter {
 ```typescript
 import 'reflect-metadata';
 
+// 装饰器工厂：返回装饰器函数，在 target（类）上写入自定义元数据
 function Injectable() {
   return function (target: any) {
-    Reflect.defineMetadata('injectable', true, target);
+    Reflect.defineMetadata('injectable', true, target); // 标记该类可被 DI 容器注入
   };
 }
 
-@Injectable()
+@Injectable()  // 类被标记后，容器可根据 design:paramtypes 等解析依赖
 class Service {}
 ```
 
@@ -326,6 +380,7 @@ class Service {}
 5. **如何实现类型安全的 EventEmitter（按事件名推导 payload）？**
    - 用**字面量联合**定义事件名，用**映射类型**定义“事件名 → payload”：
    ```typescript
+   // EventMap：事件名 -> payload 类型；K extends keyof E 保证 event 和 payload 一一对应
    type EventMap = { click: { x: number; y: number }; input: string };
    class TypedEmitter<E extends Record<string, any>> {
      on<K extends keyof E>(event: K, fn: (payload: E[K]) => void): void;
@@ -333,7 +388,7 @@ class Service {}
    }
    const e = new TypedEmitter<EventMap>();
    e.on('click', (p) => p.x);  // p 推断为 { x: number; y: number }
-   e.emit('input', 'hi');      // 第二个参数必须是 string
+   e.emit('input', 'hi');      // 第二个参数必须是 string，否则报错
    ```
 
 6. **Redux 里如何让 dispatch 的 action 与 reducer 分支类型一致？**
