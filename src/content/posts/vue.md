@@ -1,11 +1,11 @@
 ---
 title: Vue
 published: 2026-02-27
-description: ''
+description: 'Vue 2/3 响应式、MVVM、Diff、Composition API、生态与 2026 面试考点速查'
 image: ''
-tags: [Vue]
+tags: [Vue, 前端, 面试]
 category: ''
-draft: false 
+draft: false
 lang: 'zh-cn'
 ---
 
@@ -19,53 +19,194 @@ Vue（读音 /vjuː/）是一套用于构建用户界面的**渐进式 JavaScrip
 - **声明式渲染**：通过模板语法把数据与 DOM 绑定，数据变化时视图自动更新。
 - **组件化**：将界面拆成可复用的组件，组合成完整页面。
 
-## 与其他框架的对比
+## 与其他框架的对比（2026 面试向）
 
 | 对比项 | Vue | React | Angular |
 |--------|-----|--------|---------|
 | 定位 | 渐进式框架 | UI 库（生态成框架） | 完整框架 |
-| 模板 | 单文件组件（.vue）+ 模板语法 | JSX | 模板 + TypeScript |
-| 学习曲线 | 相对平缓 | 中等（JSX、Hooks） | 较陡（概念多、TypeScript） |
-| 响应式 | 内置响应式（ref/reactive） | 需 useState 等手动管理 | 变更检测 + Zone.js |
-| 生态 | Vue Router、Pinia、Vite | React Router、Redux、Next | 官方全家桶 |
-| 适用场景 | 中小型项目、快速迭代、团队偏前端 | 大型应用、组件生态丰富 | 企业级、强类型、大团队 |
+| 模板/代码写法 | 单文件组件 `.vue`（template + script + style）、模板语法 `{{ }}` / `v-if` / `v-for` / `v-model` | JSX，JS 内写 HTML 语法 | 模板 + TypeScript，强类型 |
+| 响应式/数据绑定 | 内置 `ref`/`reactive`，自动依赖收集与更新；双向绑定 `v-model` | `useState`/`useReducer` 等手动更新，单向数据流 | 变更检测 + Zone.js，双向绑定 `[(ngModel)]` |
+| Diff 原理 | 同层 diff；Vue3 用 **最长递增子序列（LIS）** 最小化 DOM 移动，支持 block、patchFlag 静态标记 | 同层 diff，Fiber 双缓冲 + 链表；key 决定复用 | 默认差量检测，可配 OnPush 策略 |
+| 生态 | Vue Router、Pinia、VueUse、Vite、Nuxt | React Router、Redux/Zustand、Next、Remix | 官方 Router、RxJS、HttpClient、NgRx |
 
-Vue 与 React 都采用虚拟 DOM，Vue 在模板编译阶段做了更多优化（如静态提升、预字符串化）；Angular 是完整 MVC 框架，自带依赖注入、表单、HTTP 等，更适合从零搭建的大型项目。
+**代码写法示例（面试可口述）：**
 
-### MVVM 是什么？
+```vue
+<!-- Vue 3 组合式：响应式 + 模板绑定 -->
+<script setup>
+import { ref, computed } from 'vue'
+const count = ref(0)
+const double = computed(() => count.value * 2)
+</script>
+<template>
+  <button @click="count++">{{ count }}，双倍：{{ double }}</button>
+</template>
+```
 
-**MVVM**（Model-View-ViewModel）是一种前端架构模式，把界面与数据、业务逻辑分离，通过 **ViewModel** 做“数据绑定”，使数据变化自动反映到视图上，视图操作也通过 ViewModel 更新数据，从而减少手写 DOM 操作。
+```jsx
+// React：手动 setState，JSX
+const [count, setCount] = useState(0)
+const double = count * 2
+return <button onClick={() => setCount(c => c + 1)}>{count}，双倍：{double}</button>
+```
 
-- **Model**：数据与业务逻辑（如接口数据、本地状态）。
+Vue 与 React 都采用虚拟 DOM；Vue 在编译阶段做静态提升、patchFlag 等优化；Angular 是完整 MVC 框架，自带依赖注入、表单、HTTP，适合大型企业项目。
+
+### 一、MVVM 是什么？
+
+**MVVM**（Model-View-ViewModel）是一种前端架构模式：把界面与数据、业务逻辑分离，通过 **ViewModel** 做“数据绑定”，数据变化自动反映到视图，视图操作通过 ViewModel 更新数据，减少手写 DOM。
+
+- **Model**：数据与业务逻辑（接口数据、本地状态）。
 - **View**：用户看到的界面（HTML / 模板）。
-- **ViewModel**：连接 Model 与 View 的桥梁。它持有 View 所需的数据，并暴露给 View 绑定；同时监听 View 的交互（如输入、点击），更新 Model 或自身状态。当 Model 或 ViewModel 中的数据变化时，通过**数据绑定**自动更新 View。
+- **ViewModel**：连接 Model 与 View。持有 View 所需数据并暴露绑定；监听 View 交互并更新 Model 或自身；Model/ViewModel 变化时通过**数据绑定**自动更新 View。
 
-Vue 并非严格按 MVVM 命名（官方文档也提到这一点），但思路一致：Vue 实例相当于 ViewModel，`data`/`ref`/`reactive` 相当于 Model，模板相当于 View；`v-model`、`{{ }}`、响应式系统实现了“数据驱动视图”和“视图反馈数据”的双向绑定。
+**数据流**：Model → ViewModel → View（展示）；用户操作 View → ViewModel 更新 → 再写回 Model（如需）。  
+**好处**：View 只负责展示与转发事件，业务与数据集中在 ViewModel/Model，便于测试与维护；数据一变视图自动更新。
+
+**Vue 与 MVVM 的对应**：Vue 实例/组件相当于 ViewModel，`data`/`ref`/`reactive` 相当于 Model，模板相当于 View。Vue 并非严格按 MVVM 命名，但思路一致。
 
 **MVVM 结构示意：**
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                        View                             │
-│   (模板 / DOM：用户看到的界面，通过绑定显示数据)           │
-│   {{ message }}  <input v-model="message">              │
+│  View（模板/DOM：{{ message }}、<input v-model="message">）  │
 └───────────────────────┬─────────────────────────────────┘
                         │ 数据绑定 / 事件监听
-                        │ (双向：数据 → 视图，视图 → 数据)
 ┌───────────────────────▼─────────────────────────────────┐
-│                    ViewModel                             │
-│   (Vue 实例 / 组件：维护状态、处理逻辑、暴露给 View)        │
-│   data: { message: '...' }   methods: { ... }           │
+│  ViewModel（Vue 实例：data、methods、维护状态与逻辑）         │
 └───────────────────────┬─────────────────────────────────┘
                         │ 读写 / 请求
 ┌───────────────────────▼─────────────────────────────────┐
-│                      Model                              │
-│   (业务数据：接口、本地存储、纯数据)                        │
+│  Model（接口、本地存储、纯数据）                             │
 └─────────────────────────────────────────────────────────┘
 ```
 
-- **数据流**：Model → ViewModel → View（展示）；用户操作 View → ViewModel 更新 → 再写回 Model（如需）。
-- **好处**：View 只负责展示与转发事件，业务与数据集中在 ViewModel/Model，便于测试与维护；数据一变视图自动更新，无需手动操作 DOM。
+---
+
+### 二、响应式原理（Vue2 vs Vue3）
+
+Vue 的响应式负责：**数据变化时，自动通知依赖该数据的视图或计算、侦听器更新**。核心是**依赖收集**（get 时记下“谁在用”）和**触发更新**（set 时通知“用的人”）。
+
+#### Vue 2：Object.defineProperty
+
+- **实现**：遍历 `data` 的每个属性，用 `Object.defineProperty` 重写 getter/setter。get 时把“当前正在执行的 Watcher”加入 Dep，set 时 Dep 通知所有 Watcher 执行（重新渲染或 watch 回调）。
+- **局限**：无法检测新增/删除属性（需 `Vue.set`）；无法监听数组下标与 length，需重写数组变异方法；初始化就要递归把对象全部变成响应式。
+
+**Vue 2 核心五要素（面试必讲）：**
+
+> 该图描述的是 **Vue 2** 的流程（Observer/Dep/Watcher/Compile/View）。Vue 3 改用 Proxy + effect/track/trigger，角色对应关系见下方「Vue 3：Proxy」小节，不共用此图。
+
+![Vue 2 响应式核心流程：Observer / Dep / Watcher / Compile / View](./image/vue-reactivity-core-flow.png)
+
+| 角色 | 职责 |
+|------|------|
+| **Observer** | 劫持并监听所有属性：遍历 `data`，用 `Object.defineProperty` 改成 getter/setter。 |
+| **Dep** | 每个响应式属性一个 Dep，收集“谁在用我”（Watcher），set 时通知这些 Watcher。 |
+| **Watcher** | 订阅者。渲染时创建 Render Watcher，求值触发 get 被 Dep 收集；Dep 通知时执行更新（render/watch）。 |
+| **Compile** | 解析模板与指令，初始化 View，为依赖数据的节点绑定更新函数、创建 Watcher。 |
+| **View** | 最终 DOM，由 Compile 初始化、Watcher 驱动更新。 |
+
+**数据流**：Compile 解析 → 创建 Watcher 并绑定更新函数 → Watcher 求值触发 get → Dep 收集 Watcher → 数据 set → Dep.notify → Watcher 更新 → View 更新。
+
+```
+  data 初始化 → Observer → Object.defineProperty(get/set)
+       get → Dep.depend() → 当前 Watcher 加入 Dep
+       set → Dep.notify() → Watcher 执行 update → 重新 render / watch
+```
+
+#### Vue 3：Proxy
+
+- **实现**：用 `Proxy` 代理整个对象，不遍历、不改写原对象。get 时 `track` 收集依赖，set/delete 时 `trigger` 触发更新。
+- **优势**：新增/删除属性、数组下标与 length 天然支持；按需代理；深层嵌套递归代理；Map/Set 也可响应式。
+
+**核心概念（与 Vue 2 对应）：**
+
+| Vue 2 | Vue 3 | 作用 |
+|--------|--------|------|
+| Dep | targetMap + depsMap + dep(Set) | 存「哪个 key 被哪些 effect 依赖」 |
+| Watcher | effect | 当前执行的副作用（如 render、watch） |
+| get → Dep.depend() | get → track() | 把当前 effect 加入该 key 的依赖集合 |
+| set → Dep.notify() | set → trigger() | 取出该 key 的 effect 集合并执行 |
+
+**数据结构**：`targetMap: WeakMap<target, depsMap>`，`depsMap: Map<key, dep>`，`dep: Set<effect>`。即：**目标对象 → 属性名 → 依赖该属性的 effect 集合**。  
+**流程简述**：`reactive(obj)` 返回 Proxy；组件渲染时在 `effect` 中执行 render，render 里访问 `obj.xxx` 触发 get → `track(target, key)` 把当前 effect 记入 `targetMap`；之后 `obj.xxx = newVal` 触发 set → `trigger(target, key)` 取出该 key 对应的 effect 集合并依次执行（如重新 render）。`ref(val)` 本质是 `{ value: val }` 的响应式包装，基本类型通过 `.value` 走 Proxy。
+
+**简化实现（面试可手写思路）：**
+
+```js
+const targetMap = new WeakMap()
+let activeEffect = null
+
+function reactive(obj) {
+  return new Proxy(obj, {
+    get(target, key) {
+      track(target, key)
+      return Reflect.get(target, key)
+    },
+    set(target, key, value) {
+      Reflect.set(target, key, value)
+      trigger(target, key)
+      return true
+    }
+  })
+}
+
+function track(target, key) {
+  if (!activeEffect) return
+  let depsMap = targetMap.get(target)
+  if (!depsMap) targetMap.set(target, (depsMap = new Map()))
+  let dep = depsMap.get(key)
+  if (!dep) depsMap.set(key, (dep = new Set()))
+  dep.add(activeEffect)
+}
+
+function trigger(target, key) {
+  const depsMap = targetMap.get(target)
+  if (!depsMap) return
+  const dep = depsMap.get(key)
+  dep?.forEach(effect => effect())
+}
+
+function effect(fn) {
+  activeEffect = fn
+  fn()
+  activeEffect = null
+}
+```
+
+- **effect(fn)**：执行 fn 前把 fn 设为“当前活跃的 effect”，fn 里对响应式数据的读会触发 get → track，把 fn 加入对应 key 的 dep；之后该 key 被写时 trigger 会执行这些 fn。
+- **ref**：对基本类型用 `{ value }` 包装再 reactive，模板中自动解包；在 effect 里读 `ref.value` 同样会 track。
+
+**Vue 3 响应式流程简图：**
+
+```
+  reactive(obj) / ref(val)
+          │
+          ▼
+  Proxy ──► get ──► track(target, key) ──► 当前 effect 加入 targetMap
+          │
+          └── set/delete ──► trigger(target, key) ──► 执行该 key 的 effects ──► 重新 render / effect
+```
+
+| 对比项 | Vue 2 | Vue 3 |
+|--------|--------|--------|
+| 实现 | Object.defineProperty 逐属性 | Proxy 代理整个对象 |
+| 新增/删除属性 | 需 $set | 天然支持 |
+| 数组索引/length | 需重写数组方法 | 天然支持 |
+| 依赖收集 | Watcher + Dep | effect + targetMap(key → Set\<effect\>) |
+
+---
+
+### 三、数据双向绑定
+
+在 MVVM 里，**数据驱动视图**（数据变 → 视图自动更新）和**视图反馈数据**（用户操作 → 更新数据）合起来就是“双向绑定”。Vue 通过**响应式 + 模板语法**实现这两点：
+
+- **数据 → 视图**：模板里 `{{ count }}`、`:value="msg"` 等会访问响应式数据；render 时 get 被收集，数据一变 set 触发更新，重新 render 再 patch 到 DOM。
+- **视图 → 数据**：`v-model` 本质是 **:value + @input**（Vue2 为 `value`/`input`，Vue3 默认 `modelValue`/`update:modelValue`）；用户输入触发事件，在回调里更新响应式数据，从而完成“视图反馈数据”。
+
+所以：**双向绑定 = 响应式（数据变→视图） + v-model/事件（视图→数据）**。Vue 实例/组件是 ViewModel，`data`/`ref`/`reactive` 是 Model，模板是 View；响应式系统保证“数据驱动视图”，`v-model` 与事件保证“视图反馈数据”。
+
+---
 
 ## 渲染流程
 
@@ -101,56 +242,6 @@ template → compile → render() → VNode tree → diff(patch) → DOM
                 ↓
           setter 触发 → 重新 render → 新 VNode → patch
 ```
-
-### Vue 数据响应原理（Vue2 vs Vue3）
-
-Vue 的响应式系统负责：**当数据变化时，自动通知依赖该数据的视图（或计算、侦听器）进行更新**。核心是“依赖收集”和“触发更新”。
-
-#### Vue 2：Object.defineProperty
-
-- **实现方式**：遍历 `data` 的每个属性，用 `Object.defineProperty` 重写 getter/setter。get 时收集“当前正在执行的 Watcher”为依赖，set 时通知这些依赖执行更新（如重新渲染、执行 watch）。
-- **局限**：无法检测**新增属性**（需用 `Vue.set`/`this.$set`）和**删除属性**；无法监听**数组下标赋值**和 **length**，需对数组的 push/pop/shift/unshift/splice/sort/reverse 做重写（变异方法）；初始化时就要递归把对象所有属性变成响应式。
-
-**Vue 2 响应式流程简图：**
-
-![Vue 2 响应式流程](./image/vue-reactivity-v2.png)
-
-```
-     data 初始化
-          │
-          ▼
-  Observer 遍历属性 ──► Object.defineProperty(get/set)
-          │
-          ├── get ──► Dep.depend() ──► 当前 Watcher 加入 Dep
-          └── set ──► Dep.notify() ──► 所有 Watcher 执行 update ──► 重新 render / watch
-```
-
-#### Vue 3：Proxy
-
-- **实现方式**：用 `Proxy` 代理整个对象，get 时 track 收集依赖，set/delete 时 trigger 触发更新。不遍历、不改写原对象属性。
-- **优势**：新增、删除属性都能拦截；数组下标、length 自然支持；按需代理，只有被访问过的属性才参与依赖收集；**深层嵌套**也会被递归代理，子属性变化同样能触发更新；对 Map/Set 等也可做响应式。
-
-**Vue 3 响应式流程简图：**
-
-![Vue 3 响应式流程](./image/vue-reactivity-v3.png)
-
-```
-  reactive(obj) / ref(val)
-          │
-          ▼
-  Proxy ──► get ──► track(target, key) ──► 当前 effect 加入 targetMap
-          │
-          └── set/delete ──► trigger(target, key) ──► 执行对应 effects ──► 重新 render / effect
-```
-
-| 对比项 | Vue 2 | Vue 3 |
-|--------|--------|--------|
-| 实现 | Object.defineProperty 逐属性 | Proxy 代理整个对象 |
-| 新增/删除属性 | 需 $set | 天然支持 |
-| 数组索引/length | 需重写数组方法 | 天然支持 |
-| 依赖收集 | Watcher + Dep | effect + targetMap(key → Set\<effect\>) |
-
----
 
 ### Vue 渲染流程（详细版）与 Diff 更新
 
@@ -1853,4 +1944,20 @@ if (newIndexToOldIndexMap[i] === 0) {
 4. 如果该子节点需要移动，则根据增序列和当前遍历的位置 i 的关系来判断是否需要移动，如果需要移动，则调用 `move` 函数来移动该节点到正确的位置。
 
 ![image-20230403142758157](C:/Users/Zhangwenye/Desktop/博客/source/img/1470043159-872e87c1beb7489b_fix732.png)
+
+---
+
+## Vue 2026 面试考点速查
+
+| 主题 | 问题 | 简要回答 |
+|------|------|----------|
+| 响应式 Vue2 | 原理？ | `Object.defineProperty` 劫持 get/set；Observer 遍历 data，Dep 收集 Watcher，set 时 Dep.notify → Watcher 更新。 |
+| 响应式 Vue3 | 与 Vue2 区别？ | 用 Proxy 代理整个对象，get track / set trigger；天然支持新增/删除属性、数组下标；effect + targetMap。 |
+| 响应式 Vue3 | 原理（track/trigger/effect）？ | targetMap(WeakMap) → depsMap(Map) → dep(Set\<effect\>)；get 时 track 把当前 effect 加入 dep；set 时 trigger 取出 dep 中 effects 执行；组件 render 在 effect 中执行。 |
+| 核心五要素 | Observer/Dep/Watcher/Compile/View 各做什么？ | Observer 劫持监听属性；Dep 收集并通知 Watcher；Watcher 订阅与执行更新；Compile 解析模板、绑定更新；View 初始化和更新。 |
+| Diff | Vue2 与 Vue3 的 diff？ | Vue2 双端比较；Vue3 头尾 + 乱序用 LIS 最小化移动，patchFlag/block 优化。 |
+| 数据绑定 | v-model 本质？ | 语法糖：`:value` + `@input`（Vue2）；Vue3 默认 `modelValue` + `update:modelValue`；3.4+ 推荐 `defineModel()`。 |
+| 生态 | 常用生态？ | Vue Router、Pinia、VueUse、Vite、Nuxt。 |
+| 组件通信 | 父子/跨级？ | 父子：props + emit；跨级：provide/inject、Pinia/Vuex。 |
+| 生命周期 | 常用钩子？ | setup 替代 beforeCreate/created；onMounted/onUpdated/onUnmounted 等对应选项式。 |
 
