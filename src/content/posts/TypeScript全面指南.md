@@ -81,8 +81,8 @@ const u: User = { id: 1, name: 'Tom' };
      - **表达能力**：`type` 可表达联合 `A | B`、元组 `[string, number]`、字面量联合 `'a' | 'b'`、映射类型、条件类型、从 typeof 推导等；`interface` 只能描述对象形状（及函数调用签名）。
    - **必须用 type 的场景**：联合类型、交叉多个接口以外的复杂类型、需要条件类型/ infer 时、需要从值推导类型时。
 
-     @TODO 区别写得不详细
-   
+   **速查对比**：interface 可合并、仅对象/函数形状；type 不可合并、可表达联合/元组/字面量/条件类型/映射类型。扩展已有类型用 interface 声明合并；需要 `A | B`、`[string, number]`、`keyof T`、条件类型等时用 type。
+
 4. **类型守卫有哪些？自定义类型守卫的签名为什么是 `x is Type`？**
    - 内置：`typeof`（仅限 number/string/boolean/symbol/undefined/function/object）、`instanceof`、`in`。
    - **自定义类型守卫**：函数返回 `arg is Type`，在条件为真时编译器将参数收窄为 `Type`。若写成 `boolean`，编译器不会收窄，仅保留布尔判断。
