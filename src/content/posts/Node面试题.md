@@ -1,6 +1,6 @@
 ---
 title: Node.js 面试题
-published: 2026-02-26
+published: 2026-05-08
 description: 'Node.js 面试题大全，侧重后端应用与 Node 核心理解：ES6、JS 高级、事件/流/文件/网络、异步与部署、Async/Express、MongoDB/Redis 等'
 image: ''
 tags: [Node.js, 面试, 后端, EventEmitter, Stream, Express]
@@ -147,8 +147,14 @@ fn(p1, p2, p3);
 
 ### 4.1 Node 概览
 
-**1. 为什么要用 Node？**  
-简单（JS/JSON）、强大（非阻塞 I/O、高并发）、轻量（前后端统一语言）、可扩展（多实例、多机、丰富第三方库）。
+**1. 为什么要用 Node？**
+
+- **Node 的定义**：Node.js 是一个基于 **Chrome V8 引擎** 的 JavaScript 运行时，让 JS 脱离浏览器在服务端运行，提供文件、网络、进程等系统能力。本质是“JS + 事件驱动 + 非阻塞 I/O”的服务端平台。
+- **为什么是单线程？**：JS 引擎（V8）执行 JS 时是单线程的，避免多线程下的锁、竞态与上下文切换；Node 把耗时 I/O 交给底层（libuv）与系统完成，主线程只负责执行 JS 和调度回调，用**事件循环**协调任务，因此“单线程”指的是 JS 执行模型，不是整台机器只有一线程。
+- **怎么支持高并发？**：依靠 **事件循环 + 非阻塞 I/O**。主线程不阻塞等待 I/O，而是注册回调后继续处理其他请求；当 I/O 完成（如网络响应、文件读完），由 libuv 将回调放入任务队列，主线程在下一轮循环中执行。这样单进程就能同时处理大量连接（高并发），典型场景如 HTTP 服务、WebSocket。
+- **什么叫非阻塞 I/O？**：发起 I/O 操作（读文件、发请求、查数据库）时，**不等待**操作完成就立即返回，把“完成后的处理”通过回调或 Promise 注册；等系统 I/O 完成后，再在事件循环中执行回调。与之相对的是“阻塞 I/O”：调用会一直等到数据就绪才返回，期间线程被占住，无法处理其他请求。
+
+在此基础上，用 Node 的理由可概括为：简单（JS/JSON）、强大（非阻塞 I/O、高并发）、轻量（前后端统一语言）、可扩展（多实例、多机、丰富第三方库）。
 
 **2. Node 的架构是什么样子的？**  
 
@@ -376,6 +382,263 @@ Node 单线程，异步靠事件循环；同步会阻塞，高并发下影响大
 
 **2. 有哪些方法可以进行异步流程控制？**  
 多层回调、拆成命名函数再回调、async 库、Promise、async/await。
+
+### 一、并发模型详解
+
+#### 1. 概念：为什么 Node 是单线程？
+
+Node 采用**单线程 + 事件循环 + 非阻塞 I/O** 的并发模型，而非多线程。设计初衷是：
+
+- **避免锁与竞争**：多线程需要加锁、处理竞态，复杂度高；单线程同一时刻只执行一段 JS，无数据竞争。
+- **I/O 才是瓶颈**：Web 服务多数时间在等磁盘、网络，CPU 空闲；若用阻塞 I/O，线程会空转；非阻塞 I/O 把等待交给操作系统，单线程即可在等待期间处理其他请求。
+- **简单可预测**：不用考虑线程安全，回调顺序由事件循环保证，逻辑更清晰。
+
+因此 Node 适合 **I/O 密集型** 场景（高并发请求、大量文件/网络操作），对 **CPU 密集型** 则会阻塞主线程，需额外手段处理。
+
+#### 2. 事件循环（Event Loop）概念
+
+事件循环由 **libuv** 实现，负责把“已就绪的任务”放到主线程执行。主线程执行完当前任务后，从事件循环中取下一个回调执行，如此循环。
+
+**核心思路**：主线程不等待 I/O，而是注册回调；当 I/O 完成时，libuv 将回调放入对应队列；事件循环按阶段依次检查这些队列，取出回调交给主线程执行。
+
+**宏任务阶段（简化）**：`timers`（setTimeout/setInterval 到期）→ `pending callbacks`（上一轮延迟的 I/O 回调）→ `idle/prepare`（内部用）→ `poll`（等待 I/O，最耗时）→ `check`（setImmediate）→ `close callbacks`（如 socket.on('close')）。每进入下一阶段前，会清空当前**微任务队列**。
+
+**微任务**：`process.nextTick`、`Promise.then`、`queueMicrotask`。微任务在当前宏任务结束后、下一宏任务前执行；`nextTick` 优先级高于 Promise。
+
+**执行顺序示例**：
+
+```javascript
+console.log('1');
+setTimeout(() => console.log('2'), 0);
+Promise.resolve().then(() => console.log('3'));
+process.nextTick(() => console.log('4'));
+console.log('5');
+// 输出：1 5 4 3 2
+// 解释：1、5 同步；4 nextTick 微任务；3 Promise 微任务；2 宏任务 setTimeout
+```
+
+#### 3. 非阻塞 I/O 与并发 vs 并行
+
+- **非阻塞 I/O**：调用 `fs.readFile`、`http.request` 时，主线程不等待，立即返回；操作系统完成 I/O 后，通过 libuv 将回调放入 poll 队列，事件循环再执行。主线程在等待期间可处理其他请求，实现高并发。
+- **并发 vs 并行**：  
+  - **并发**：多个任务在时间上重叠，单核上交替执行（如单线程事件循环）。  
+  - **并行**：多核同时执行多段代码。  
+  Node 单进程是并发，不是并行；要利用多核需 **cluster**（多进程）或 **worker_threads**（多线程）。
+
+---
+
+### 二、怎么处理复杂任务：概念、比较与实现
+
+#### 1. 任务类型与选型
+
+| 类型 | 特点 | 主线程表现 | 推荐做法 |
+|------|------|------------|----------|
+| **I/O 密集型** | 大量磁盘、网络等待 | 等待期间可处理其他请求 | 非阻塞 I/O + 事件循环，单线程即可 |
+| **CPU 密集型** | 大量计算（加密、压缩、解析） | 长时间占用主线程，阻塞所有请求 | offload 到子进程或工作线程 |
+| **混合型** | 既有 I/O 又有计算 | 计算段会阻塞 | 计算部分 offload，I/O 保持异步 |
+
+#### 2. 各种方法对比
+
+| 方法 | 粒度 | 进程/线程 | 内存 | 通信 | 适用场景 | 优点 | 缺点 |
+|------|------|-----------|------|------|----------|------|------|
+| **child_process.fork** | 进程 | 独立进程 | 各自 V8 实例，内存大 | message/send（序列化） | 长时 CPU 任务、需强隔离 | 隔离好、可执行任意脚本 | 启动慢、内存占用高 |
+| **worker_threads** | 线程 | 同进程多线程 | 共享进程，可共享 SharedArrayBuffer | postMessage / 共享内存 | CPU 密集、需共享数据 | 比 fork 轻量、启动快 | 需 Node 12+，共享内存要小心 |
+| **cluster** | 多进程 | 多进程监听同端口 | 每进程独立 | 无直接通信（各处理请求） | 多核 Web 服务 | 充分利用多核、负载均衡 | 不适合单任务 offload |
+| **任务队列（Bull）** | 进程 | 多 Worker 进程 | 独立 | Redis | 可延迟、需重试、解耦 | 持久化、重试、监控 | 依赖 Redis，有延迟 |
+| **分片 + setImmediate** | 主线程 | 单线程 | 无额外 | 无 | 大数组/大列表处理 | 无依赖、实现简单 | 仍占用主线程，单核 |
+| **Stream** | 主线程 | 单线程 | 分块读，内存小 | 无 | 大文件、大数据流 | 内存友好 | 仅适合流式数据 |
+
+**选型建议**：单次 heavy 计算 → worker_threads 或 fork；多核 Web 服务 → cluster；可延迟任务、需重试 → 队列；大数组遍历 → 分片；大文件 → Stream。
+
+---
+
+#### 3. 实际代码：child_process.fork
+
+**概念**：fork 会启动一个新的 Node 进程，执行指定脚本；父子进程通过 `child.send()` 和 `process.on('message')` 通信，数据会被序列化（structured clone），不能传函数。
+
+```javascript
+// ========== main.js：主进程 ==========
+const { fork } = require('child_process');
+const path = require('path');
+
+// 创建子进程，执行 worker-fork.js
+const child = fork(path.join(__dirname, 'worker-fork.js'), [], {
+  stdio: ['pipe', 'pipe', 'pipe', 'ipc'],  // 建立 IPC 通道
+});
+
+// 发送任务
+child.send({ type: 'compute', n: 5000000 });
+
+// 接收结果
+child.on('message', (msg) => {
+  console.log('主进程收到:', msg);
+  if (msg.result !== undefined) {
+    console.log('计算结果:', msg.result);
+    child.disconnect();  // 结束通信
+  }
+});
+
+child.on('error', (err) => console.error('子进程错误:', err));
+child.on('exit', (code, signal) => console.log('子进程退出:', code, signal));
+
+// ========== worker-fork.js：子进程 ==========
+process.on('message', (msg) => {
+  if (msg.type === 'compute') {
+    let sum = 0;
+    for (let i = 0; i < msg.n; i++) sum += i;
+    process.send({ result: sum });
+  }
+});
+```
+
+---
+
+#### 4. 实际代码：worker_threads
+
+**概念**：在同一进程内创建新线程，共享部分内存（通过 SharedArrayBuffer）；比 fork 轻量，适合纯 CPU 计算、需要共享大数据的场景。
+
+```javascript
+// ========== main-worker.js：主线程 ==========
+const { Worker } = require('worker_threads');
+const path = require('path');
+
+const worker = new Worker(path.join(__dirname, 'worker-thread.js'), {
+  workerData: { n: 5000000 },  // 传入数据，无需序列化复杂对象
+});
+
+worker.on('message', (result) => {
+  console.log('主线程收到结果:', result);
+});
+
+worker.on('error', (err) => {
+  console.error('Worker 错误:', err);
+});
+
+worker.on('exit', (code) => {
+  if (code !== 0) console.error('Worker 退出码:', code);
+});
+
+// ========== worker-thread.js：工作线程 ==========
+const { parentPort, workerData } = require('worker_threads');
+
+// workerData 即主线程传入的 { n: 5000000 }
+let sum = 0;
+for (let i = 0; i < workerData.n; i++) {
+  sum += i;
+}
+
+parentPort.postMessage(sum);
+```
+
+**与 fork 对比**：worker 同进程，启动更快、内存占用更小；fork 独立进程， crash 互不影响，适合执行不同脚本或第三方命令。
+
+---
+
+#### 5. 实际代码：cluster 多进程
+
+**概念**：主进程 fork 多个子进程，每个子进程运行同一套服务代码并监听同一端口；由操作系统做负载均衡，适合多核 Web 服务。
+
+```javascript
+// ========== cluster-server.js ==========
+const cluster = require('cluster');
+const http = require('http');
+const numCPUs = require('os').cpus().length;
+
+if (cluster.isPrimary) {
+  console.log(`主进程 ${process.pid}，启动 ${numCPUs} 个子进程`);
+  for (let i = 0; i < numCPUs; i++) {
+    cluster.fork();
+  }
+  cluster.on('exit', (worker, code, signal) => {
+    console.log(`子进程 ${worker.process.pid} 退出，重启...`);
+    cluster.fork();
+  });
+} else {
+  http.createServer((req, res) => {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end(`响应来自进程 ${process.pid}`);
+  }).listen(3000);
+  console.log(`子进程 ${process.pid} 已监听 3000`);
+}
+```
+
+---
+
+#### 6. 实际代码：分片 + setImmediate 让出主线程
+
+**概念**：不创建新进程/线程，把大任务拆成小批，每批之间用 `setImmediate` 把控制权交回事件循环，避免长时间阻塞；适合主线程能接受“慢慢算”的场景。
+
+```javascript
+/**
+ * 分片处理大数组，每处理 chunkSize 个元素后让出主线程
+ * @param {Array} arr 待处理数组
+ * @param {number} chunkSize 每批数量
+ * @param {function} processor 处理函数 (chunk, index) => void
+ * @param {function} onDone 全部完成回调
+ */
+function processInChunks(arr, chunkSize, processor, onDone) {
+  let index = 0;
+
+  function next() {
+    const end = Math.min(index + chunkSize, arr.length);
+    const chunk = arr.slice(index, end);
+
+    for (let i = 0; i < chunk.length; i++) {
+      processor(chunk[i], index + i);
+    }
+
+    index = end;
+    if (index >= arr.length) {
+      onDone();
+      return;
+    }
+    // 让出主线程，下一轮事件循环再继续
+    setImmediate(next);
+  }
+
+  next();
+}
+
+// 使用示例：对 100 万元素做“耗时”操作
+const big = Array.from({ length: 1e6 }, (_, i) => i);
+const results = [];
+processInChunks(big, 50000, (val) => {
+  results.push(val * 2);
+}, () => {
+  console.log('处理完成，共', results.length, '项');
+});
+```
+
+---
+
+#### 7. 实际代码：Stream 流式处理大文件
+
+**概念**：不一次性读入内存，用 `createReadStream` 分块读取，每块通过 `data` 事件处理；适合大文件、日志解析等。
+
+```javascript
+const fs = require('fs');
+
+function countLines(filePath, onDone) {
+  let count = 0;
+  const stream = fs.createReadStream(filePath, { encoding: 'utf8' });
+
+  stream.on('data', (chunk) => {
+    for (const c of chunk) {
+      if (c === '\n') count++;
+    }
+  });
+
+  stream.on('end', () => {
+    onDone(count);
+  });
+
+  stream.on('error', (err) => {
+    console.error('读取失败:', err);
+  });
+}
+
+countLines('./large.log', (n) => console.log('行数:', n));
+```
 
 **3. 怎样绑定 Node 程序到 80 端口？**  
 sudo 运行、或用 Nginx/Apache 反向代理、或 iptables 端口重定向。

@@ -1,6 +1,6 @@
 ---
 title: AI
-published: 2026-02-26
+published: 2026-05-08
 description: 'AI 应用方向面试知识框架：大模型、RAG、Agent（架构/记忆/ReAct/工具/MCP/多智能体/工程与面试题）、提示工程、评估与工程实践'
 image: ''
 tags: [AI, 大模型, RAG, LLM, 面试]
@@ -1665,6 +1665,42 @@ Q20：如何解决多页文档中，图片和描述文本不在同一页导致�
 
 **状态图概念**：  
 图的每个节点读/写**共享状态**（如 messages、current_step）；边可根据状态字段决定下一节点（如 `has_tool_calls -> tool_node`）。比传统 DAG 更灵活：可循环、可条件分支、可挂“人工确认”节点。
+
+#### 2026 AI 应用开发框架选型与技术原理
+
+AI 应用开发框架已经从早期的“Prompt + Chain 组合库”演进为 **Agent Runtime + RAG 数据层 + 工作流编排 + 工具协议 + 可观测评估** 的工程体系。搜索最新官方文档后，可以按下表理解主流框架的定位：
+
+| 框架 | 核心定位 | 技术原理 | 适用场景 |
+|---|---|---|---|
+| [LangChain](https://docs.langchain.com/oss/python/langchain/overview) / [LangGraph](https://docs.langchain.com/oss/python/langgraph/overview) | 通用 LLM 应用与有状态 Agent 编排 | LangChain 提供模型、工具、Retriever、Agent 抽象；LangGraph 用状态图表达节点、边、循环、持久化、人机协同与可恢复执行。 | 复杂 Agent、需要循环/状态/人工确认的业务流程。 |
+| [OpenAI Agents SDK](https://openai.github.io/openai-agents-python/) | OpenAI 生态下的轻量 Agent Runtime | Agent = 指令 + 模型 + 工具；SDK 管理 Agent Loop、工具调用、handoff、guardrails、sessions、tracing 和 MCP 工具。 | 主要使用 OpenAI 模型，需要快速做生产级工具型 Agent。 |
+| [Google ADK](https://adk.dev/) | 面向生产部署的多语言 Agent 框架 | 以 Agent、Tool、Session、Memory、Artifact、Event 为核心；支持多工具、多 Agent、顺序/循环/并行 workflow、评估、部署和上下文压缩。 | Google/Gemini 生态、企业部署、多语言栈、需要 Cloud Run/GKE 等部署路径。 |
+| [LlamaIndex](https://developers.llamaindex.ai/python/framework/) | 数据/RAG 优先的 LLM 应用框架 | 把外部数据抽象成 Document/Node，构建 Index、Retriever、Query Engine、Response Synthesizer，也支持 Agent、工具、结构化抽取与评估。 | 知识库问答、文档解析、私有数据检索、复杂 RAG。 |
+| [Haystack](https://docs.haystack.deepset.ai/docs/intro) | 生产级 RAG、搜索和多模态 Pipeline | 用 Component + Pipeline 组成可复用 DAG；核心包括 Document Store、Retriever、Ranker、Generator、Agent、Tool。 | 企业搜索、RAG 服务、可测试可部署的数据处理流水线。 |
+| [AutoGen](https://microsoft.github.io/autogen/stable/index.html) | 多 Agent 对话与分布式 Agent 系统 | AgentChat 面向对话式单/多 Agent；Core 是事件驱动 runtime，支持动态 workflow、分布式 Agent、多语言扩展和工具执行。 | 多角色协作、研究型多 Agent、需要事件驱动或分布式运行。 |
+| [CrewAI](https://docs.crewai.com/en/concepts/crews) | 角色分工明确的 Crew/Task 编排 | Crew = Agents + Tasks + Process；支持 sequential/hierarchical 流程、manager agent、memory、cache、planning、callbacks、结构化输出。 | 市场调研、内容生产、数据分析、类似团队分工的业务自动化。 |
+| [Semantic Kernel](https://learn.microsoft.com/en-us/semantic-kernel/overview/) | 企业应用中 AI 与现有代码/API 的中间件 | 用 Plugin/Function 暴露已有业务能力，模型通过函数调用驱动业务 API；强调 C#/Python/Java、OpenAPI、企业可观测与安全扩展。 | Microsoft/.NET 企业栈、需要把现有系统能力接给模型。 |
+| [Pydantic AI](https://pydantic.dev/docs/ai/overview/) | 类型安全的 Python Agent 框架 | 以 Pydantic schema、依赖注入、类型检查、结构化输出校验、工具参数校验为核心；支持 Logfire 可观测、MCP/A2A、人机审批和持久执行。 | Python 后端、强类型结构化输出、需要单元测试和类型约束的生产服务。 |
+| [Dify](https://docs.dify.ai/en/use-dify/getting-started/introduction) | 低代码 LLM 应用平台 | 通过可视化编排 Prompt、工作流、知识库、工具、变量、发布与监控，把 Agent/RAG 能力产品化。 | 非纯代码团队、快速搭建内部应用、运营可配置的 AI 工作流。 |
+| [Agno](https://docs.agno.com/introduction) | 轻量 Agent/Team/Workflow 框架 | 以 Agent、Tool、Knowledge、Memory、Team、Workflow 抽象组织应用，强调快速构建和多模型集成。 | 快速原型、多 Agent 小团队、轻量 Python Agent 服务。 |
+
+**底层共性原理可以归纳为 8 层：**
+
+1. **模型抽象层**：把 OpenAI、Anthropic、Gemini、DeepSeek、本地模型等包装成统一接口，屏蔽消息格式、流式事件、tool call 字段差异。
+2. **Prompt 与结构化输出层**：用模板组织 system/user/tool 消息，用 JSON Schema、Pydantic、Zod 等约束输出，减少解析失败。
+3. **工具调用层**：把普通函数、HTTP API、数据库、MCP Server、OpenAPI 能力注册成工具；模型只生成工具名和参数，执行器负责真实调用。
+4. **Agent Loop 层**：典型闭环是 `输入 -> LLM 决策 -> 工具调用 -> Observation -> 再次 LLM -> 最终答案`，可设置最大步数、超时、重试和熔断。
+5. **状态与记忆层**：短期状态保存当前任务 messages、plan、tool results；长期记忆写入数据库/向量库/文件系统，下一次按需检索注入。
+6. **RAG 数据层**：加载文档，切分 chunk，生成 embedding，写入向量库；查询时做召回、rerank、上下文拼接，再交给模型生成。
+7. **工作流编排层**：简单任务用链式/DAG；复杂 Agent 用状态图，支持循环、条件边、人机确认、并行子任务、断点恢复。
+8. **可观测与评估层**：记录每轮 prompt、模型输出、工具参数、工具结果、token、延迟、错误栈；用测试集评估成功率、检索质量、工具调用准确率和成本。
+
+**面试答题重点：**
+
+- 不要只背框架名，要能说明“为什么需要框架”：模型本身只会生成文本，框架负责把模型接入数据、工具、状态、流程、评估和部署。
+- LangChain/LangGraph 的核心优势是**状态图 + Agent 编排**；LlamaIndex/Haystack 的核心优势是**数据管道和 RAG**；CrewAI/AutoGen 的核心优势是**多 Agent 分工**；OpenAI Agents SDK/Google ADK 的优势是**厂商生态内的生产级 runtime**；Pydantic AI/Semantic Kernel 更偏**工程类型安全和企业系统集成**。
+- 工业界常见最佳实践不是“完全自主 Agent”，而是 **Workflow 约束 Agent**：主流程可控，局部节点让 Agent 做工具选择、检索重写、结果校验。
+- 选型要看 6 个维度：模型生态、RAG 能力、状态/持久化、多 Agent 编排、可观测评估、部署与权限控制。
 
 #### 30. LangGraph 中人机协同节点
 
