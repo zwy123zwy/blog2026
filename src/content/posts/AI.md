@@ -45,6 +45,141 @@ lang: 'zh-cn'
 - **开源**：Llama、Qwen、DeepSeek、Mistral、Yi 等；基座与对话版本、商用协议。
 - **多模态**：视觉-语言模型（VLM）、语音、多模态输入输出与接口设计。
 
+### 2.3 中国大模型架构（基于 infra 模型卡片）
+
+这一部分按 `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models` 中的模型资料整理，重点看国产大模型在 2024-2026 年的架构演进：从 Dense Transformer 走向 **MoE 稀疏激活 + 高效注意力 + 长上下文 + 多模态/Agent 化**。
+
+#### 大模型架构图
+
+![DeepSeek V3 架构图](./image/ai-model-architecture/deepseek_v3_architecture.jpg)
+
+**对应说明**：DeepSeek V3 是这一组国产大模型架构里最典型的 **MLA + MoE** 路线。看这张图时，重点关注两点：第一是 MLA 如何把传统 Attention 中的 KV 表示压缩成 latent 形式，从而降低长上下文推理时的 KV Cache 占用；第二是 MoE 专家层如何让模型拥有较大的总参数规模，但单个 token 只激活少量专家。它对应下方表格中的 DeepSeek V3，也对应后文 `2.3.2 DeepSeek 系列` 对 MLA/MoE 的说明。
+
+![DeepSeek V3.2 架构图](./image/ai-model-architecture/deepseek_v3_2_architecture.jpg)
+
+**对应说明**：DeepSeek V3.2 可以作为 DeepSeek V3 到 DeepSeek V4 之间的过渡架构参考。它的重点不只是继续使用 MoE，而是在注意力效率、稀疏化策略和长上下文支持上做进一步优化。阅读时可以把它和 V3 图对照：V3 更适合理解 MLA 的基本工程收益，V3.2 更适合观察后续 DSA/稀疏注意力路线如何为百万级上下文铺垫。
+
+![DeepSeek V4 架构图](./image/ai-model-architecture/deepseek_v4_architecture.jpg)
+
+**对应说明**：DeepSeek V4 对应表格中的 DeepSeek V4 Pro/Flash，核心看 **CSA + HCA Hybrid Attention + MoE**。CSA 负责在分组内保留更完整的注意力建模，HCA 负责对远距离 token 做更强压缩，从而降低 1M 上下文下的计算和缓存压力。Pro 与 Flash 的差异可以理解为同一架构路线下的两种工程取舍：Pro 偏高难推理和复杂 Agent，Flash 偏高吞吐、低延迟在线服务。
+
+![GLM-5 架构图](./image/ai-model-architecture/glm_5_architecture.jpg)
+
+**对应说明**：GLM-5 的架构图对应表格中的 GLM-5，重点是 **DSA/MLA + MoE + 国产算力适配**。它不是单纯扩大参数，而是用稀疏注意力降低长上下文注意力开销，用 MoE 降低单 token 激活参数量，再结合训练框架和硬件适配形成可部署路线。面试里可以把 GLM-5 归纳为“结构效率 + 国产化部署 + Agent 能力”的组合。
+
+![Kimi K2 架构图](./image/ai-model-architecture/kimi_k_2_architecture.jpg)
+
+**对应说明**：Kimi K2 是理解 Kimi 系列演进的前代参考。它主要用于观察 Kimi 在长上下文语言模型上的基础结构，为后续 Kimi K2.5 的多模态增强做对照。看这张图时，可以关注语言模型主体、注意力机制和 MoE 层的组织方式，理解 Kimi 系列为什么适合长文档、复杂上下文和文档推理任务。
+
+![Kimi K2.5 架构图](./image/ai-model-architecture/kimi_k_2_5_architecture.jpg)
+
+**对应说明**：Kimi K2.5 对应表格中的 Kimi K2.5，重点是 **MLA + MoE + MoonViT**。相比 K2，它更明显地把视觉-语言能力纳入模型架构：视觉部分通过 MoonViT 抽取图像特征，语言模型部分继续承担长上下文和推理能力。它适合放在“多模态从外挂转向原生融合”的趋势下理解。
+
+![MiniMax M2.5 架构图](./image/ai-model-architecture/minimax_m_2_5_architecture.jpg)
+
+**对应说明**：MiniMax M2.5 对应表格中的 MiniMax M2.5，核心是 **GQA + MoE + MTP**。GQA 用于降低注意力层的 KV Cache 成本，MoE 用较低激活参数换取更大的模型容量，MTP 则服务于解码加速和吞吐提升。它的工程定位更偏 Agent、代码和高并发推理场景，因此可以作为“性能/成本优化型大模型”的代表。
+
+![Qwen3.5 27B 架构图](./image/ai-model-architecture/qwen_3_5_27b_architecture.jpg)
+
+**对应说明**：Qwen3.5 27B 是 Qwen3.5 的 Dense 版本参考图，适合和后面的 397B-A17B MoE 版本对比。Dense 版本的好处是结构更直接、部署和推理链路更简单，但单 token 计算通常需要经过完整参数。看这张图时，重点关注 Qwen3.5 中 Gated DeltaNet、Gated Attention 与 FFN 的组合方式。
+
+![Qwen3.5 397B-A17B 架构图](./image/ai-model-architecture/qwen_3_5_397b_a17b_architecture.jpg)
+
+**对应说明**：Qwen3.5 397B-A17B 对应表格中的 Qwen3.5 MoE 版本，重点是 **Gated DeltaNet + Gated Attention + MoE/FFN + MTP**。其中 Gated DeltaNet 偏线性注意力路线，适合提高长序列建模效率；Gated Attention 用来补充全局依赖建模；MoE 提供参数容量；MTP 用于提升解码吞吐。它是解释 Qwen 系列“长上下文 + 中文生态 + 工程任务”的核心图。
+
+![Qwen3-VL 235B-A22B 架构图](./image/ai-model-architecture/qwen_3_vl_235b_a22b_architecture.jpg)
+
+**对应说明**：Qwen3-VL 235B-A22B 对应表格中的 Qwen3-VL MoE 版本，重点是 **视觉编码器 + DeepStack + Interleaved-MRoPE + MoE 语言模型**。这张图适合用来说明 VLM 的典型链路：图像/视频先被切成视觉 token，经视觉编码和 projector 对齐到语言模型空间，再和文本 token 一起进入统一上下文推理。它对应后文 Qwen 系列中“国产 VLM 怎么做架构设计”的说明。
+
+![Qwen3-VL 32B 架构图](./image/ai-model-architecture/qwen_3_vl_32b_architecture.jpg)
+
+**对应说明**：Qwen3-VL 32B 是 Qwen3-VL 的 Dense 版本参考图，可以和 235B-A22B MoE 版本放在一起看。它更适合说明多模态链路本身：视觉特征如何进入语言模型、位置编码如何同时覆盖文本和视觉 token、模型如何支持 OCR、视频理解和 GUI Agent。MoE 版本强调容量和效率，32B Dense 版本强调结构清晰和部署可控。
+
+![Step 3.5 Flash 架构图](./image/ai-model-architecture/step_3_5_flash_architecture.jpg)
+
+**对应说明**：Step 3.5 Flash 对应表格中的 Step 3.5 Flash，重点是 **GQA + SWA/全注意力混合 + MoE + MTP**。SWA 负责降低长序列局部注意力成本，全注意力层补足全局信息交互，MoE 控制单 token 计算量，MTP 提升输出速度。它的定位更偏高吞吐推理和 Agent 执行链路，适合作为“Flash/高并发版本如何做架构取舍”的例子。
+
+#### 架构图文件对应关系
+
+| 正文模型 | 博客图片文件 | infra 原始文件 | 对应说明 |
+|---|---|---|---|
+| DeepSeek V3 | `./image/ai-model-architecture/deepseek_v3_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\deepseek_v3\deepseek_v3_architecture.jpg` | 对应表格中的 DeepSeek V3，用于说明 MLA + MoE 架构。 |
+| DeepSeek V3.2 | `./image/ai-model-architecture/deepseek_v3_2_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\deepseek_v3_2\deepseek_v3_2_architecture.jpg` | 作为 DeepSeek V3 到 V4 之间的演进参考，重点看 DSA 与架构优化。 |
+| DeepSeek V4 | `./image/ai-model-architecture/deepseek_v4_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\deepseek_v4\deepseek_v4_architecture.jpg` | 对应表格中的 DeepSeek V4 Pro/Flash，用于说明 CSA/HCA Hybrid Attention + MoE。 |
+| GLM-5 | `./image/ai-model-architecture/glm_5_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\glm_5\glm_5_architecture.jpg` | 对应表格中的 GLM-5，用于说明 DSA/MLA + MoE 与国产算力部署路线。 |
+| Kimi K2 | `./image/ai-model-architecture/kimi_k_2_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\kimi_k_2\kimi_k_2_architecture.jpg` | 作为 Kimi K2.5 的前代参考，用于对比 Kimi 系列从语言模型到多模态的演进。 |
+| Kimi K2.5 | `./image/ai-model-architecture/kimi_k_2_5_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\kimi_k_2_5\kimi_k_2_5_architecture.jpg` | 对应表格中的 Kimi K2.5，用于说明 MLA + MoE + MoonViT。 |
+| MiniMax M2.5 | `./image/ai-model-architecture/minimax_m_2_5_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\minimax_m_2_5\minimax_m_2_5_architecture.jpg` | 对应表格中的 MiniMax M2.5，用于说明 GQA + MoE + MTP 的高吞吐 Agent 路线。 |
+| Qwen3.5 27B | `./image/ai-model-architecture/qwen_3_5_27b_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\qwen3_5\qwen_3_5_27b_architecture.jpg` | 对应 Qwen3.5 Dense 版本，用于和 397B-A17B MoE 版本对比。 |
+| Qwen3.5 397B-A17B | `./image/ai-model-architecture/qwen_3_5_397b_a17b_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\qwen3_5\qwen_3_5_397b_a17b_architecture.jpg` | 对应表格中的 Qwen3.5 MoE 版本，用于说明 Gated DeltaNet + Gated Attention + MoE/FFN + MTP。 |
+| Qwen3-VL 235B-A22B | `./image/ai-model-architecture/qwen_3_vl_235b_a22b_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\qwen3_vl\qwen_3_vl_235b_a22b_architecture.jpg` | 对应表格中的 Qwen3-VL MoE 版本，用于说明 DeepStack、Interleaved-MRoPE 与多模态融合。 |
+| Qwen3-VL 32B | `./image/ai-model-architecture/qwen_3_vl_32b_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\qwen3_vl\qwen_3_vl_32b_architecture.jpg` | 对应 Qwen3-VL Dense 版本，用于和 235B-A22B MoE 版本对比。 |
+| Step 3.5 Flash | `./image/ai-model-architecture/step_3_5_flash_architecture.jpg` | `C:\Users\Zhangwenye\Desktop\infra\InfraTech\models\step_3_5_flash\step_3_5_flash_architecture.jpg` | 对应表格中的 Step 3.5 Flash，用于说明 GQA + SWA/全注意力混合 + MoE + MTP。 |
+
+| 模型 | 公司/系列 | 架构关键词 | 参数规模（总/激活） | 上下文 | 主要定位 |
+|---|---|---|---:|---:|---|
+| DeepSeek V3 | 深度求索 | MLA + MoE | 671B / 37B | 128K | 通用、代码、数学、开源部署 |
+| DeepSeek V4 Pro/Flash | 深度求索 | CSA + HCA Hybrid Attention + MoE + mHC | 1.6T / 49B；284B / 13B | 1M | 超长上下文、高难推理、高并发服务 |
+| GLM-5 | 智谱 | MLA(DSA) + MoE | 774B / 40B | 200K | Agent、代码、国产算力部署 |
+| Kimi K2.5 | 月之暗面 | MLA + MoE + MoonViT | 1T / 32B | 256K | 视觉-语言、长文档、Thinking/Instruct |
+| Qwen3.5 | 阿里通义 | Gated DeltaNet + Gated Attention + MoE/FFN + MTP | 397B / 17B；27B Dense | 262K，可扩展至 1M | 长上下文、视觉语言、中文与工程任务 |
+| Qwen3-VL | 阿里通义 | DeepStack + Interleaved-MRoPE + Dense/MoE | 32B；235B / 22B | 256K，可扩展至 1M | 图文、视频、OCR、GUI Agent |
+| MiniMax M2.5 | MiniMax | GQA + MoE + MTP | 229B / 10B | 200K | Agent、代码、高速推理 |
+| Step 3.5 Flash | 阶跃星辰 | GQA + SWA/全注意力 + MoE + MTP | 196B / 11B | 256K | 高吞吐推理、Agent 场景 |
+
+#### 2.3.1 共性趋势
+
+- **MoE 成为主流扩容方式**：DeepSeek、GLM、Kimi、Qwen、MiniMax、Step 都把“总参数容量”和“单 token 激活参数”分离，用少量激活专家降低推理成本。
+- **注意力机制从标准 MHA 演进到高效变体**：DeepSeek V3 使用 MLA 降低 KV Cache；DeepSeek V4 使用 CSA/HCA 支撑 1M 上下文；GLM-5 引入 DSA；Qwen3.5 用 Gated DeltaNet 与 Gated Attention 混合；Step 3.5 Flash 用 SWA 与全注意力混合。
+- **长上下文是核心竞争点**：128K 已经变成基础能力，200K-256K 是国产模型常见配置，DeepSeek V4 与 Qwen 系列进一步扩展到 1M 级别。
+- **多模态从外挂转向原生融合**：Kimi K2.5 使用 MoonViT，Qwen3-VL 使用视觉编码器、多级视觉特征融合和 Interleaved-MRoPE，目标不只是看图，而是支持视频、OCR、GUI 操作和视觉 Agent。
+- **MTP 多 token 预测用于推理加速**：Qwen3.5、MiniMax M2.5、Step 3.5 Flash 都把 MTP 作为提升解码吞吐的重要机制。
+
+#### 2.3.2 DeepSeek 系列：MLA/MoE 到混合注意力
+
+DeepSeek V3 的核心是 **MLA + MoE**。MLA（Multi-head Latent Attention）通过压缩 KV 表示降低长序列推理中的缓存占用；MoE 让模型拥有 671B 总参数，但每个 token 只激活约 37B 参数。工程上，它适合大规模在线服务：长上下文成本低，专家路由提升容量，整体部署效率优于同规模 Dense 模型。
+
+DeepSeek V4 进一步面向百万上下文优化，核心变化是：
+
+- **Hybrid Attention（CSA + HCA）**：CSA 处理分组内全量与跨组稀疏注意力，HCA 对远距离 token 做重度压缩，降低 1M 上下文的计算和 KV Cache 压力。
+- **MoE 双规格**：Pro 约 1.6T 总参数、49B 激活，偏高难推理和复杂 Agent；Flash 约 284B 总参数、13B 激活，偏高吞吐和低时延部署。
+- **mHC 超连接**：增强深层大规模模型的训练稳定性，缓解万亿级 MoE 收敛问题。
+- **Muon 优化器与两阶段后训练**：先强化领域专家，再做统一蒸馏整合，兼顾专项能力和通用能力。
+
+#### 2.3.3 GLM-5：DSA + MoE 与国产算力路线
+
+GLM-5 从 GLM 4.x 的 GQA 路线切到 **MLA(DSA) + MoE**。前三层使用 Dense 结构，后续主体层结合 DSA 稀疏注意力与 MoE 专家层，单 token 激活 8 个专家，支持 200K 上下文。它的工程意义在于把模型结构、训练框架和国产算力适配放在一起考虑，更适合需要私有化、国产化和 Agent 能力的企业场景。
+
+面试时可以这样概括：GLM-5 不是单纯堆参数，而是用 DSA 降低长上下文注意力开销，用 MoE 降低单 token 计算量，再通过国产算力适配降低部署约束。
+
+#### 2.3.4 Qwen 系列：混合注意力、多模态与工程化
+
+Qwen3.5 延续 Qwen-Next 思路，MoE 版本采用 **Gated DeltaNet + Gated Attention + MoE**，Dense 版本采用 **Gated DeltaNet + Gated Attention + FFN**。其层结构可以理解为“3 个线性注意力块 + 1 个门控注意力块”的周期组合：
+
+- **Gated DeltaNet**：偏线性注意力，适合长序列高效建模。
+- **Gated Attention**：带输出门控、QK 归一化与部分 RoPE，补充全局依赖建模能力。
+- **MoE 版本**：397B 总参数、17B 激活，512 个专家，每 token 激活 10 个路由专家加 1 个共享专家。
+- **MTP**：用于多步训练和解码加速，提高交互式任务吞吐。
+
+Qwen3-VL 则是多模态方向的代表。Dense 版本为 32B，MoE 版本为 235B/A22B，使用 DeepStack、Interleaved-MRoPE、多级视觉特征融合和文本-时间戳对齐能力。它适合回答“国产 VLM 怎么做架构设计”这类问题：视觉编码器先抽取图像/视频 patch 特征，再通过 projector 对齐到文本 hidden size，最后把视觉 token 与文本 token 放入统一语言模型上下文中推理。
+
+#### 2.3.5 Kimi、MiniMax、Step：不同效率路线
+
+- **Kimi K2.5**：LLM 部分采用 MLA + MoE，视觉部分采用 MoonViT。1T 总参数、32B 激活、384 专家、每 token 激活 8 个专家，支持 256K 上下文。它的特点是把 Kimi K2 的语言能力和视觉-语言持续预训练结合起来，同时支持 instruct 与 thinking 模式。
+- **MiniMax M2.5**：采用 GQA + MoE，229B 总参数、10B 激活，输出端接 MTP。注意力层使用 partial RoPE、QK RMSNorm 和 GQA，MoE 路由采用 sigmoid 与 routing bias，目标是用较低激活参数获得较强 Agent/代码能力和较快推理速度。
+- **Step 3.5 Flash**：采用 GQA + 滑窗注意力（SWA）/全注意力混合 + MoE + MTP。196B 总参数、11B 激活、288 个路由专家、Top-8 激活，适合高吞吐、低延迟、Agent 执行链路。
+
+#### 2.3.6 架构选型记忆法
+
+如果面试中被问“这些国产大模型架构怎么区分”，可以按下面四个维度回答：
+
+1. **参数效率**：Dense 参数全激活，MoE 只激活少数专家；所以国产大模型大多选择 MoE 扩容量、控成本。
+2. **长上下文效率**：MLA/DSA/CSA/HCA/Gated DeltaNet/SWA 都是在解决标准 Attention 的 KV Cache 和二次复杂度问题。
+3. **推理吞吐**：MTP、GQA、KV Cache 压缩、稀疏路由和 Flash 版本都是为了降低延迟与成本。
+4. **业务适配**：DeepSeek 偏开源和推理代码，GLM 偏国产算力与 Agent，Qwen 偏中文生态和多模态工程，Kimi 偏长上下文与视觉语言，MiniMax/Step 偏 Agent 和高吞吐。
+
+一句话总结：**中国大模型架构的主线是“MoE 扩容量、高效注意力拉长上下文、MTP/GQA 降低推理成本、多模态与 Agent 化增强产品落地”。**
+
 ## AI 基础概念
 
 
@@ -1826,4 +1961,3 @@ Q20：如何解决多页文档中，图片和描述文本不在同一页导致�
 - 如何设计一个多轮对话的上下文与记忆策略？
 - 微调数据如何构造与清洗？指令数据多少条起步？
 - 如何做 LLM 的 A/B 测试与效果归因？
-
