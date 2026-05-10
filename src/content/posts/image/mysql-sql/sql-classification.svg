@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="560" viewBox="0 0 1120 560" role="img" aria-labelledby="title desc">
+  <title id="title">SQL 分类面试速记图</title>
+  <desc id="desc">SQL 按用途分为 DDL、DML、TCL、DCL，分别对应结构、数据、事务、权限。</desc>
+  <rect width="1120" height="560" rx="24" fill="#f8fafc"/>
+  <text x="560" y="58" text-anchor="middle" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="34" font-weight="700" fill="#0f172a">SQL 分类：按用途记，不按命令死背</text>
+  <g font-family="Arial, 'Microsoft YaHei', sans-serif">
+    <rect x="58" y="116" width="236" height="326" rx="18" fill="#e0f2fe" stroke="#0284c7" stroke-width="2"/>
+    <text x="176" y="164" text-anchor="middle" font-size="34" font-weight="700" fill="#075985">DDL</text>
+    <text x="176" y="202" text-anchor="middle" font-size="18" fill="#0f172a">数据定义语言</text>
+    <text x="90" y="254" font-size="21" fill="#0f172a">CREATE</text>
+    <text x="90" y="292" font-size="21" fill="#0f172a">ALTER</text>
+    <text x="90" y="330" font-size="21" fill="#0f172a">DROP</text>
+    <text x="90" y="368" font-size="21" fill="#0f172a">TRUNCATE</text>
+    <text x="176" y="414" text-anchor="middle" font-size="18" font-weight="700" fill="#075985">改结构</text>
+
+    <rect x="321" y="116" width="236" height="326" rx="18" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="439" y="164" text-anchor="middle" font-size="34" font-weight="700" fill="#166534">DML</text>
+    <text x="439" y="202" text-anchor="middle" font-size="18" fill="#0f172a">数据操作语言</text>
+    <text x="353" y="254" font-size="21" fill="#0f172a">INSERT</text>
+    <text x="353" y="292" font-size="21" fill="#0f172a">UPDATE</text>
+    <text x="353" y="330" font-size="21" fill="#0f172a">DELETE</text>
+    <text x="353" y="368" font-size="21" fill="#0f172a">SELECT</text>
+    <text x="439" y="414" text-anchor="middle" font-size="18" font-weight="700" fill="#166534">改数据 / 查数据</text>
+
+    <rect x="584" y="116" width="236" height="326" rx="18" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="702" y="164" text-anchor="middle" font-size="34" font-weight="700" fill="#92400e">TCL</text>
+    <text x="702" y="202" text-anchor="middle" font-size="18" fill="#0f172a">事务控制语言</text>
+    <text x="616" y="254" font-size="21" fill="#0f172a">COMMIT</text>
+    <text x="616" y="292" font-size="21" fill="#0f172a">ROLLBACK</text>
+    <text x="616" y="330" font-size="21" fill="#0f172a">SAVEPOINT</text>
+    <text x="702" y="414" text-anchor="middle" font-size="18" font-weight="700" fill="#92400e">控提交 / 回滚</text>
+
+    <rect x="847" y="116" width="236" height="326" rx="18" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+    <text x="965" y="164" text-anchor="middle" font-size="34" font-weight="700" fill="#5b21b6">DCL</text>
+    <text x="965" y="202" text-anchor="middle" font-size="18" fill="#0f172a">数据控制语言</text>
+    <text x="879" y="254" font-size="21" fill="#0f172a">GRANT</text>
+    <text x="879" y="292" font-size="21" fill="#0f172a">REVOKE</text>
+    <text x="965" y="414" text-anchor="middle" font-size="18" font-weight="700" fill="#5b21b6">控权限</text>
+  </g>
+  <rect x="186" y="478" width="748" height="44" rx="22" fill="#0f172a"/>
+  <text x="560" y="507" text-anchor="middle" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="20" font-weight="700" fill="#ffffff">面试一句话：DDL 改结构，DML 改数据，TCL 管事务，DCL 管权限</text>
+</svg>

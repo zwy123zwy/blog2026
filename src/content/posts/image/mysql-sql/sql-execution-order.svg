@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="640" viewBox="0 0 1120 640" role="img" aria-labelledby="title desc">
+  <title id="title">SQL 逻辑执行顺序</title>
+  <desc id="desc">展示 SQL 书写顺序和逻辑执行顺序的差异。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect width="1120" height="640" rx="24" fill="#f8fafc"/>
+  <text x="560" y="56" text-anchor="middle" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="34" font-weight="700" fill="#0f172a">SQL 不是按书写顺序执行</text>
+  <g font-family="Arial, 'Microsoft YaHei', sans-serif">
+    <text x="242" y="108" text-anchor="middle" font-size="24" font-weight="700" fill="#1d4ed8">书写顺序</text>
+    <text x="878" y="108" text-anchor="middle" font-size="24" font-weight="700" fill="#be123c">逻辑执行顺序</text>
+
+    <g font-size="20" font-weight="700">
+      <rect x="98" y="140" width="288" height="48" rx="12" fill="#dbeafe"/><text x="242" y="171" text-anchor="middle" fill="#1e3a8a">SELECT</text>
+      <rect x="98" y="202" width="288" height="48" rx="12" fill="#dbeafe"/><text x="242" y="233" text-anchor="middle" fill="#1e3a8a">FROM</text>
+      <rect x="98" y="264" width="288" height="48" rx="12" fill="#dbeafe"/><text x="242" y="295" text-anchor="middle" fill="#1e3a8a">JOIN ... ON</text>
+      <rect x="98" y="326" width="288" height="48" rx="12" fill="#dbeafe"/><text x="242" y="357" text-anchor="middle" fill="#1e3a8a">WHERE</text>
+      <rect x="98" y="388" width="288" height="48" rx="12" fill="#dbeafe"/><text x="242" y="419" text-anchor="middle" fill="#1e3a8a">GROUP BY</text>
+      <rect x="98" y="450" width="288" height="48" rx="12" fill="#dbeafe"/><text x="242" y="481" text-anchor="middle" fill="#1e3a8a">HAVING</text>
+      <rect x="98" y="512" width="288" height="48" rx="12" fill="#dbeafe"/><text x="242" y="543" text-anchor="middle" fill="#1e3a8a">ORDER BY / LIMIT</text>
+    </g>
+
+    <path d="M 442 338 C 520 338, 594 338, 672 338" stroke="#334155" stroke-width="3" fill="none" marker-end="url(#arrow)"/>
+    <text x="560" y="314" text-anchor="middle" font-size="18" fill="#334155">面试问的是右边</text>
+
+    <g font-size="19" font-weight="700">
+      <rect x="734" y="132" width="288" height="40" rx="10" fill="#ffe4e6"/><text x="878" y="158" text-anchor="middle" fill="#9f1239">1. FROM</text>
+      <rect x="734" y="184" width="288" height="40" rx="10" fill="#ffe4e6"/><text x="878" y="210" text-anchor="middle" fill="#9f1239">2. JOIN ... ON</text>
+      <rect x="734" y="236" width="288" height="40" rx="10" fill="#ffe4e6"/><text x="878" y="262" text-anchor="middle" fill="#9f1239">3. WHERE</text>
+      <rect x="734" y="288" width="288" height="40" rx="10" fill="#ffe4e6"/><text x="878" y="314" text-anchor="middle" fill="#9f1239">4. GROUP BY</text>
+      <rect x="734" y="340" width="288" height="40" rx="10" fill="#ffe4e6"/><text x="878" y="366" text-anchor="middle" fill="#9f1239">5. 聚合函数</text>
+      <rect x="734" y="392" width="288" height="40" rx="10" fill="#ffe4e6"/><text x="878" y="418" text-anchor="middle" fill="#9f1239">6. HAVING</text>
+      <rect x="734" y="444" width="288" height="40" rx="10" fill="#ffe4e6"/><text x="878" y="470" text-anchor="middle" fill="#9f1239">7. SELECT</text>
+      <rect x="734" y="496" width="288" height="40" rx="10" fill="#ffe4e6"/><text x="878" y="522" text-anchor="middle" fill="#9f1239">8. DISTINCT / ORDER BY</text>
+      <rect x="734" y="548" width="288" height="40" rx="10" fill="#ffe4e6"/><text x="878" y="574" text-anchor="middle" fill="#9f1239">9. LIMIT</text>
+    </g>
+  </g>
+</svg>

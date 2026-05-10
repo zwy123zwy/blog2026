@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="640" viewBox="0 0 1120 640" role="img" aria-labelledby="title desc">
+  <title id="title">LEFT JOIN 中 ON 和 WHERE 的区别</title>
+  <desc id="desc">右表过滤条件放在 WHERE 会过滤 NULL 行，可能改变 LEFT JOIN 语义。</desc>
+  <rect width="1120" height="640" rx="24" fill="#f8fafc"/>
+  <text x="560" y="56" text-anchor="middle" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="32" font-weight="700" fill="#0f172a">LEFT JOIN 的坑：右表条件放错位置</text>
+  <g font-family="Arial, 'Microsoft YaHei', sans-serif">
+    <rect x="80" y="104" width="460" height="430" rx="20" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+    <text x="310" y="148" text-anchor="middle" font-size="25" font-weight="700" fill="#991b1b">条件放 WHERE</text>
+    <text x="112" y="198" font-size="19" fill="#0f172a">LEFT JOIN orders o ON u.id = o.user_id</text>
+    <text x="112" y="230" font-size="19" fill="#0f172a">WHERE o.status = 1</text>
+    <circle cx="246" cy="338" r="104" fill="#bfdbfe" fill-opacity="0.72" stroke="#2563eb" stroke-width="2"/>
+    <circle cx="368" cy="338" r="104" fill="#fecaca" fill-opacity="0.72" stroke="#dc2626" stroke-width="2"/>
+    <text x="206" y="342" text-anchor="middle" font-size="20" font-weight="700" fill="#1e3a8a">用户</text>
+    <text x="408" y="342" text-anchor="middle" font-size="20" font-weight="700" fill="#991b1b">订单</text>
+    <text x="307" y="342" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">匹配且</text>
+    <text x="307" y="368" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">status=1</text>
+    <text x="310" y="488" text-anchor="middle" font-size="20" font-weight="700" fill="#991b1b">右表 NULL 行被 WHERE 过滤掉</text>
+
+    <rect x="580" y="104" width="460" height="430" rx="20" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="810" y="148" text-anchor="middle" font-size="25" font-weight="700" fill="#166534">条件放 ON</text>
+    <text x="612" y="198" font-size="19" fill="#0f172a">LEFT JOIN orders o</text>
+    <text x="612" y="230" font-size="19" fill="#0f172a">ON u.id = o.user_id AND o.status = 1</text>
+    <circle cx="746" cy="338" r="104" fill="#bfdbfe" fill-opacity="0.72" stroke="#2563eb" stroke-width="2"/>
+    <circle cx="868" cy="338" r="104" fill="#bbf7d0" fill-opacity="0.72" stroke="#16a34a" stroke-width="2"/>
+    <text x="706" y="342" text-anchor="middle" font-size="20" font-weight="700" fill="#1e3a8a">用户</text>
+    <text x="908" y="342" text-anchor="middle" font-size="20" font-weight="700" fill="#166534">订单</text>
+    <text x="807" y="342" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">只匹配</text>
+    <text x="807" y="368" text-anchor="middle" font-size="18" font-weight="700" fill="#0f172a">status=1</text>
+    <text x="810" y="488" text-anchor="middle" font-size="20" font-weight="700" fill="#166534">左表用户仍然保留</text>
+  </g>
+  <rect x="218" y="568" width="684" height="42" rx="21" fill="#0f172a"/>
+  <text x="560" y="596" text-anchor="middle" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="19" font-weight="700" fill="#ffffff">面试记忆：ON 管匹配，WHERE 管结果过滤</text>
+</svg>
