@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 260">
+  <rect width="800" height="260" fill="#0f172a"/>
+  <text x="400" y="28" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">持续进化的 Harness 防错反馈闭环</text>
+  <text x="400" y="48" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">Mitchell Hashimoto：AGENTS.md 每一行对应一个 Agent 真实失败案例</text>
+  <!-- Loop -->
+  <rect x="140" y="70" width="180" height="50" rx="10" fill="#3b82f6"/>
+  <text x="230" y="100" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="sans-serif">Agent 执行任务</text>
+  <path d="M320 95 L370 95" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="375" y="70" width="180" height="50" rx="10" fill="#ef4444"/>
+  <text x="465" y="100" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="sans-serif">发现失败案例</text>
+  <path d="M555 95 L610 95" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="615" y="70" width="120" height="50" rx="10" fill="#f59e0b"/>
+  <text x="675" y="100" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="sans-serif">分析根因</text>
+  <path d="M675 120 L675 155 L230 155 L230 120" fill="none" stroke="#10b981" stroke-width="2" marker-end="url(#g)"/>
+  <rect x="350" y="140" width="100" height="30" rx="6" fill="#10b981"/>
+  <text x="400" y="160" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">工程化方案</text>
+  <!-- Bottom -->
+  <rect x="60" y="185" width="680" height="60" rx="6" fill="#1e293b"/>
+  <text x="400" y="208" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="sans-serif">Hashimoto 的六步路线</text>
+  <text x="400" y="228" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">放弃聊天模式 → 复现自己工作 → 下班前启动Agent → 外包确定性任务 → 工程化Harness → 始终有Agent在跑</text>
+  <text x="400" y="242" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">目标：10-20% 工作时间有后台 Agent 运行</text>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#10b981"/></marker>
+  </defs>
+</svg>

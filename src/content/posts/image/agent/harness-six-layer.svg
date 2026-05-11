@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350">
+  <rect width="800" height="350" fill="#0f172a"/>
+  <text x="400" y="28" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">Harness Engineering 六层架构</text>
+  <text x="400" y="48" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">从"定义边界"到"兜底恢复"的完整闭环</text>
+  <!-- L1 -->
+  <rect x="25" y="62" width="750" height="35" rx="6" fill="#3b82f6"/>
+  <text x="80" y="84" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">L1 信息边界层</text>
+  <text x="300" y="84" text-anchor="middle" fill="#bfdbfe" font-size="10" font-family="sans-serif">Agent 该知道什么、不该知道什么</text>
+  <text x="620" y="84" text-anchor="middle" fill="#bfdbfe" font-size="10" font-family="sans-serif">角色定义 + 无关信息裁剪</text>
+  <!-- L2 -->
+  <rect x="25" y="105" width="750" height="35" rx="6" fill="#8b5cf6"/>
+  <text x="80" y="127" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">L2 工具系统层</text>
+  <text x="300" y="127" text-anchor="middle" fill="#ddd6fe" font-size="10" font-family="sans-serif">Agent 怎么跟外部世界交互</text>
+  <text x="620" y="127" text-anchor="middle" fill="#ddd6fe" font-size="10" font-family="sans-serif">工具选拔 + 调用时机 + 结果提炼</text>
+  <!-- L3 -->
+  <rect x="25" y="148" width="750" height="35" rx="6" fill="#f59e0b"/>
+  <text x="80" y="170" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">L3 执行编排层</text>
+  <text x="300" y="170" text-anchor="middle" fill="#fef3c7" font-size="10" font-family="sans-serif">多步骤任务怎么串起来</text>
+  <text x="620" y="170" text-anchor="middle" fill="#fef3c7" font-size="10" font-family="sans-serif">目标→信息→分析→生成→检查</text>
+  <!-- L4 -->
+  <rect x="25" y="191" width="750" height="35" rx="6" fill="#10b981"/>
+  <text x="80" y="213" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">L4 记忆与状态层</text>
+  <text x="300" y="213" text-anchor="middle" fill="#d1fae5" font-size="10" font-family="sans-serif">长任务中间结果怎么管</text>
+  <text x="620" y="213" text-anchor="middle" fill="#d1fae5" font-size="10" font-family="sans-serif">任务状态 + 中间产物 + 长期记忆</text>
+  <!-- L5 -->
+  <rect x="25" y="234" width="750" height="35" rx="6" fill="#ef4444"/>
+  <text x="80" y="256" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">L5 评估与观测层</text>
+  <text x="300" y="256" text-anchor="middle" fill="#fecaca" font-size="10" font-family="sans-serif">Agent 怎么知道自己做对了没有</text>
+  <text x="620" y="256" text-anchor="middle" fill="#fecaca" font-size="10" font-family="sans-serif">独立验证机制 + 可观测性</text>
+  <!-- L6 -->
+  <rect x="25" y="277" width="750" height="35" rx="6" fill="#64748b"/>
+  <text x="80" y="299" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">L6 约束、校验与恢复层</text>
+  <text x="300" y="299" text-anchor="middle" fill="#cbd5e1" font-size="10" font-family="sans-serif">出错了怎么办</text>
+  <text x="620" y="299" text-anchor="middle" fill="#cbd5e1" font-size="10" font-family="sans-serif">规则拦截 + 重试/回滚机制</text>
+  <!-- Tip -->
+  <text x="400" y="340" text-anchor="middle" fill="#fbbf24" font-size="11" font-family="sans-serif">从 L1（边界）和 L6（恢复）入手——投入产出比最高</text>
+</svg>

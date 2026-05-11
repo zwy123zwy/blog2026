@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 280">
+  <rect width="800" height="280" fill="#0f172a"/>
+  <text x="400" y="28" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">AI Agent 记忆系统架构</text>
+  <!-- Left: Short-term -->
+  <rect x="30" y="50" width="350" height="120" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="205" y="78" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="bold" font-family="sans-serif">短期记忆</text>
+  <text x="205" y="98" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">LLM 上下文窗口</text>
+  <text x="205" y="116" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">用户提问 + 模型回复 + 工具结果</text>
+  <text x="205" y="134" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">滑动窗口 / 摘要压缩 / 重型结果卸载</text>
+  <text x="205" y="152" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">多 Agent 间上下文隔离</text>
+  <text x="205" y="168" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">GPT-5 400K | Sonnet 4.6 1M | Gemini 3 1M</text>
+  <!-- Right: Long-term -->
+  <rect x="420" y="50" width="350" height="120" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <text x="595" y="78" text-anchor="middle" fill="#34d399" font-size="14" font-weight="bold" font-family="sans-serif">长期记忆</text>
+  <text x="595" y="98" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">持久化知识库</text>
+  <text x="595" y="116" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">写入(Record): LLM提取→结构化→入库</text>
+  <text x="595" y="134" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">检索(Retrieve): 向量化→语义搜索→注入</text>
+  <text x="595" y="152" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">VectorStore + GraphStore + Reranker</text>
+  <text x="595" y="168" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">Pinecone / Qdrant / Neo4j / Mem0</text>
+  <!-- Bottom -->
+  <rect x="80" y="190" width="640" height="70" rx="6" fill="#1e293b"/>
+  <text x="400" y="215" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="sans-serif">记忆生命周期：编码 → 存储 → 提取 → 巩固 → 反思 → 遗忘</text>
+  <text x="400" y="238" text-anchor="middle" fill="#fca5a5" font-size="10" font-family="sans-serif">最容易被忽略：遗忘 | 很多团队舍不得删 → 检索召回里全是三年前的过期噪音</text>
+  <text x="400" y="252" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif"/>
+</svg>

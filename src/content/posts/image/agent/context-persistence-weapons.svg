@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+  <rect width="800" height="300" fill="#0f172a"/>
+  <text x="400" y="28" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">长任务上下文持久化：抵抗腐化的三大武器</text>
+  <rect x="25" y="50" width="240" height="130" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="145" y="80" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="bold" font-family="sans-serif">Compaction</text>
+  <text x="145" y="100" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">上下文压缩</text>
+  <text x="145" y="118" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">LLM 总结历史内容</text>
+  <text x="145" y="136" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">保留决策+问题+进展</text>
+  <text x="145" y="154" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">丢弃冗余工具调用结果</text>
+  <text x="145" y="172" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">适合：持续对话的长流程</text>
+  <rect x="280" y="50" width="240" height="130" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+  <text x="400" y="80" text-anchor="middle" fill="#fbbf24" font-size="14" font-weight="bold" font-family="sans-serif">Note-taking</text>
+  <text x="400" y="100" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">结构化笔记</text>
+  <text x="400" y="118" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">Agent 写入 NOTES.md</text>
+  <text x="400" y="136" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">进度 + 问题 + 下一步</text>
+  <text x="400" y="154" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">重置后可重新读取</text>
+  <text x="400" y="172" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">适合：迭代式、有里程碑</text>
+  <rect x="535" y="50" width="240" height="130" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <text x="655" y="80" text-anchor="middle" fill="#34d399" font-size="14" font-weight="bold" font-family="sans-serif">Sub-agents</text>
+  <text x="655" y="100" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">多 Agent 架构</text>
+  <text x="655" y="118" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">子Agent处理专门任务</text>
+  <text x="655" y="136" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">返回 1K~2K Token 摘要</text>
+  <text x="655" y="154" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">主Agent保持干净上下文</text>
+  <text x="655" y="172" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">适合：复杂研究、需并行</text>
+  <!-- Bottom -->
+  <rect x="60" y="205" width="680" height="75" rx="6" fill="#1e293b"/>
+  <text x="400" y="232" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="sans-serif">三者组合使用，让上下文在时间维度上不变质</text>
+  <text x="400" y="255" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">Compaction 保持连贯 | Note-taking 跨窗口持久化 | Sub-agents 隔离详细搜索上下文</text>
+  <text x="400" y="272" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">关键认知：没有"一次组装永久有效"——上下文也需要新陈代谢能力</text>
+</svg>

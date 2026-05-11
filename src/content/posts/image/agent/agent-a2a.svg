@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 350">
+  <rect width="800" height="350" fill="#0f172a"/>
+  <text x="400" y="30" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">A2A 协议：Agent 之间的结构化通信</text>
+  <text x="400" y="52" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">核心思想：Agent 间用结构化数据（JSON/XML）而非自然语言通信</text>
+  <!-- Agent A -->
+  <rect x="30" y="80" width="250" height="120" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="155" y="108" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="bold" font-family="sans-serif">产品经理 Agent</text>
+  <rect x="50" y="118" width="210" height="35" rx="5" fill="#0f172a"/>
+  <text x="155" y="140" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">任务: 撰写 PRD 并下发</text>
+  <text x="155" y="168" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">自然语言 → 结构化输出</text>
+  <text x="155" y="186" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">TaskID + Dependencies + Criteria</text>
+  <!-- JSON payload -->
+  <rect x="310" y="95" width="180" height="90" rx="8" fill="#f59e0b"/>
+  <text x="400" y="115" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="monospace">A2A JSON Payload</text>
+  <text x="400" y="135" text-anchor="middle" fill="#fef3c7" font-size="9" font-family="monospace">{"task_id":"T-001",</text>
+  <text x="400" y="150" text-anchor="middle" fill="#fef3c7" font-size="9" font-family="monospace"> "deps":["API-003"],</text>
+  <text x="400" y="165" text-anchor="middle" fill="#fef3c7" font-size="9" font-family="monospace"> "acceptance":["test-pass"]}</text>
+  <!-- Agent B -->
+  <rect x="520" y="80" width="250" height="120" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <text x="645" y="108" text-anchor="middle" fill="#34d399" font-size="14" font-weight="bold" font-family="sans-serif">开发 Agent</text>
+  <rect x="540" y="118" width="210" height="35" rx="5" fill="#0f172a"/>
+  <text x="645" y="140" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">任务: 反序列化 → 实现功能</text>
+  <text x="645" y="168" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">结构化输入 → 代码生成</text>
+  <text x="645" y="186" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">无需解析自然语言歧义</text>
+  <!-- Arrows -->
+  <path d="M280 140 L310 140" stroke="#f59e0b" stroke-width="2" marker-end="url(#a)"/>
+  <path d="M490 140 L520 140" stroke="#f59e0b" stroke-width="2" marker-end="url(#a)"/>
+  <!-- Bottom -->
+  <rect x="60" y="230" width="680" height="100" rx="8" fill="#1e293b"/>
+  <text x="400" y="258" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">对比：传统自然语言通信 vs A2A 结构化通信</text>
+  <text x="400" y="282" text-anchor="middle" fill="#fca5a5" font-size="11" font-family="sans-serif">❌ 自然语言: "嗨，我写好了需求，请你开发一下" → Token 高、格式解析错误多</text>
+  <text x="400" y="304" text-anchor="middle" fill="#86efac" font-size="11" font-family="sans-serif">✅ A2A 协议: TaskID + Dependencies + AcceptanceCriteria JSON → 确定性解析</text>
+  <text x="400" y="322" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">类比：后端微服务用 RESTful/RPC 而非 HTML 解析</text>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#f59e0b"/></marker>
+  </defs>
+</svg>

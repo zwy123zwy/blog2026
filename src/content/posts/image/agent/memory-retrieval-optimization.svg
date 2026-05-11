@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 260">
+  <rect width="800" height="260" fill="#0f172a"/>
+  <text x="400" y="28" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">长期记忆检索优化策略</text>
+  <text x="400" y="48" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="sans-serif">核心结论：检索链路的 ROI 远高于写入链路</text>
+  <!-- Hybrid -->
+  <rect x="25" y="65" width="365" height="80" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="207" y="92" text-anchor="middle" fill="#60a5fa" font-size="13" font-weight="bold" font-family="sans-serif">混合检索（Hybrid Search）</text>
+  <text x="207" y="112" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">BM25 关键词 + 向量语义检索</text>
+  <text x="207" y="128" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">RRF / 线性加权 / 交叉编码器 Reranker 兜底</text>
+  <text x="207" y="144" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">专有名词加大关键词权重 | 模糊意图加大语义权重</text>
+  <!-- Metadata -->
+  <rect x="410" y="65" width="365" height="80" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+  <text x="592" y="92" text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="bold" font-family="sans-serif">元数据硬过滤（Hard Filters）</text>
+  <text x="592" y="112" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">UserID / 组织ID / 时间范围前置过滤</text>
+  <text x="592" y="128" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">多租户最关键的数据隔离手段</text>
+  <text x="592" y="144" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">高活跃租户建议独立 Collection 物理隔离</text>
+  <!-- Bottom tips -->
+  <rect x="40" y="160" width="720" height="85" rx="6" fill="#1e293b"/>
+  <text x="400" y="182" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="sans-serif">检索优化优先级</text>
+  <text x="400" y="202" text-anchor="middle" fill="#86efac" font-size="11" font-family="sans-serif">① 先查 trace：query、过滤条件、融合权重对齐 → ② Reranker 精排调参</text>
+  <text x="400" y="222" text-anchor="middle" fill="#86efac" font-size="11" font-family="sans-serif">③ 向量库索引配置（HNSW ef/IVF nlist）→ ④ 最后才加预算到提取链路</text>
+  <text x="400" y="240" text-anchor="middle" fill="#fca5a5" font-size="10" font-family="sans-serif">体感"记忆没用"时，十有八九是 Recall 跑偏或精排没把真相关顶上来</text>
+</svg>

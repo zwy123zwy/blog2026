@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+  <rect width="800" height="300" fill="#0f172a"/>
+  <text x="400" y="28" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">Stripe 混合状态机编排架构（Minions 系统）</text>
+  <text x="400" y="48" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">每周 1300+ 个无人值守 PR，不含任何人写代码</text>
+  <!-- Devbox -->
+  <rect x="30" y="65" width="230" height="85" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="145" y="92" text-anchor="middle" fill="#60a5fa" font-size="14" font-weight="bold" font-family="sans-serif">Devbox 开发环境</text>
+  <text x="145" y="112" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">AWS EC2 预装源码+服务</text>
+  <text x="145" y="128" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">预热池分配，启动~10秒</text>
+  <text x="145" y="144" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">"牲口不是宠物"</text>
+  <path d="M260 107 L295 107" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <!-- State Machine -->
+  <rect x="300" y="65" width="230" height="85" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+  <text x="415" y="92" text-anchor="middle" fill="#fbbf24" font-size="14" font-weight="bold" font-family="sans-serif">编排状态机</text>
+  <text x="415" y="112" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">混合确定性节点(lint/push)</text>
+  <text x="415" y="128" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">+ Agent节点(实现功能/修CI)</text>
+  <text x="415" y="144" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">该确定的地方确定，该灵活的地方灵活</text>
+  <path d="M530 107 L565 107" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <!-- Tools -->
+  <rect x="570" y="65" width="200" height="85" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <text x="670" y="92" text-anchor="middle" fill="#34d399" font-size="14" font-weight="bold" font-family="sans-serif">Toolshed MCP</text>
+  <text x="670" y="112" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">集中式MCP服务</text>
+  <text x="670" y="128" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="sans-serif">近 500 个工具</text>
+  <text x="670" y="144" text-anchor="middle" fill="#64748b" font-size="9" font-family="sans-serif">每Minion获取筛选子集</text>
+  <!-- Bottom feedback -->
+  <rect x="60" y="175" width="680" height="65" rx="8" fill="#1e293b" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="400" y="200" text-anchor="middle" fill="#c084fc" font-size="13" font-weight="bold" font-family="sans-serif">反馈回路</text>
+  <text x="400" y="220" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">Pre-push hook 秒级修 lint → 推送后最多 2 轮 CI（300万+测试）</text>
+  <!-- Bottom -->
+  <rect x="80" y="255" width="640" height="32" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="400" y="276" text-anchor="middle" fill="#64748b" font-size="11" font-family="sans-serif">核心理念："What's good for humans is good for agents." — 和人类工程师用同一套基础设施</text>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+</svg>

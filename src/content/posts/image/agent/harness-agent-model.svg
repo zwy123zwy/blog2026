@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 280">
+  <rect width="800" height="280" fill="#0f172a"/>
+  <text x="400" y="30" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold" font-family="sans-serif">Agent = Model + Harness</text>
+  <text x="400" y="52" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="sans-serif">你不是模型，那你就是 Harness</text>
+  <!-- Model -->
+  <rect x="40" y="75" width="340" height="80" rx="12" fill="#3b82f6"/>
+  <text x="210" y="108" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold" font-family="sans-serif">Model（模型）</text>
+  <text x="210" y="130" text-anchor="middle" fill="#bfdbfe" font-size="11" font-family="sans-serif">能力的来源</text>
+  <text x="210" y="146" text-anchor="middle" fill="#bfdbfe" font-size="11" font-family="sans-serif">文本进 → 文本出</text>
+  <!-- Plus -->
+  <text x="400" y="125" text-anchor="middle" fill="#f59e0b" font-size="28" font-weight="bold" font-family="sans-serif">+</text>
+  <!-- Harness -->
+  <rect x="420" y="75" width="340" height="80" rx="12" fill="#8b5cf6"/>
+  <text x="590" y="108" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold" font-family="sans-serif">Harness（外围系统）</text>
+  <text x="590" y="130" text-anchor="middle" fill="#ddd6fe" font-size="11" font-family="sans-serif">模型之外的一切</text>
+  <text x="590" y="146" text-anchor="middle" fill="#ddd6fe" font-size="11" font-family="sans-serif">提示词+工具+沙箱+编排+反馈</text>
+  <!-- Model can't do -->
+  <rect x="30" y="175" width="740" height="90" rx="6" fill="#1e293b"/>
+  <text x="400" y="198" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="sans-serif">模型做不到的 → Harness 补上</text>
+  <text x="400" y="218" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">记不住对话 → 记忆系统 | 执行不了代码 → Bash/沙箱</text>
+  <text x="400" y="236" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">获取不了实时信息 → Web/MCP | 操作不了文件 → 文件系统</text>
+  <text x="400" y="254" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">不知道做对了没有 → 验证闭环 | 长任务不连贯 → 上下文管理</text>
+</svg>

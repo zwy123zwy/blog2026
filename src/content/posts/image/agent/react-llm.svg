@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+  <rect width="800" height="400" fill="#0f172a"/>
+  <text x="400" y="35" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold" font-family="sans-serif">ReAct 模式：Reasoning + Acting</text>
+  <text x="400" y="58" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="sans-serif">思维链推理 + 外部环境交互 = 走一步看一步，边思考边验证</text>
+  <!-- Thought -->
+  <rect x="40" y="90" width="330" height="80" rx="10" fill="#3b82f6"/>
+  <text x="205" y="120" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold" font-family="sans-serif">Thought 思考</text>
+  <text x="205" y="142" text-anchor="middle" fill="#bfdbfe" font-size="12" font-family="sans-serif">LLM 分析当前状态</text>
+  <text x="205" y="160" text-anchor="middle" fill="#bfdbfe" font-size="12" font-family="sans-serif">"监控显示 CPU 飙到 98%，需要查慢 SQL"</text>
+  <path d="M370 130 L420 130" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <!-- Action -->
+  <rect x="430" y="90" width="330" height="80" rx="10" fill="#f59e0b"/>
+  <text x="595" y="120" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold" font-family="sans-serif">Action 行动</text>
+  <text x="595" y="142" text-anchor="middle" fill="#fef3c7" font-size="12" font-family="sans-serif">调用工具执行操作</text>
+  <text x="595" y="160" text-anchor="middle" fill="#fef3c7" font-size="12" font-family="sans-serif">query_slow_sql("user-service", "09:00-09:30")</text>
+  <path d="M595 170 L595 215" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <!-- Observation -->
+  <rect x="430" y="220" width="330" height="80" rx="10" fill="#10b981"/>
+  <text x="595" y="250" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold" font-family="sans-serif">Observation 观察</text>
+  <text x="595" y="272" text-anchor="middle" fill="#d1fae5" font-size="12" font-family="sans-serif">接收工具返回结果</text>
+  <text x="595" y="290" text-anchor="middle" fill="#d1fae5" font-size="12" font-family="sans-serif">"发现全表扫描，缺失索引"</text>
+  <path d="M430 260 L370 260 L370 170 L370 90" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="330" y="180" fill="#8b5cf6" font-size="11" font-family="sans-serif">循环</text>
+  <!-- Final Answer -->
+  <rect x="40" y="220" width="330" height="80" rx="10" fill="#64748b"/>
+  <text x="205" y="250" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold" font-family="sans-serif">Final Answer 最终答案</text>
+  <text x="205" y="272" text-anchor="middle" fill="#cbd5e1" font-size="12" font-family="sans-serif">整合所有观察结果</text>
+  <text x="205" y="290" text-anchor="middle" fill="#cbd5e1" font-size="12" font-family="sans-serif">生成结构化排查报告</text>
+  <path d="M370 260 L430 260" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <!-- Bottom note -->
+  <text x="400" y="345" text-anchor="middle" fill="#64748b" font-size="12" font-family="sans-serif">优势：减少幻觉 | 提升复杂任务成功率 | 可解释性强</text>
+  <text x="400" y="370" text-anchor="middle" fill="#64748b" font-size="12" font-family="sans-serif">代价：多轮迭代带来响应延迟 | 表现依赖工具和 Skills 质量</text>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+</svg>

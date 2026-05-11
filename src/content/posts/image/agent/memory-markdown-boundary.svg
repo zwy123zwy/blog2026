@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 250">
+  <rect width="800" height="250" fill="#0f172a"/>
+  <text x="400" y="28" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">Markdown 记忆 vs 向量库记忆 适用边界</text>
+  <rect x="20" y="50" width="365" height="100" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <text x="202" y="78" text-anchor="middle" fill="#34d399" font-size="15" font-weight="bold" font-family="sans-serif">Markdown 记忆</text>
+  <text x="202" y="100" text-anchor="middle" fill="#86efac" font-size="11" font-family="sans-serif">✅ 调试极佳：直接读写 | 部署零成本</text>
+  <text x="202" y="118" text-anchor="middle" fill="#86efac" font-size="11" font-family="sans-serif">✅ Git 原生集成 | 迁移零成本</text>
+  <text x="202" y="138" text-anchor="middle" fill="#fca5a5" font-size="11" font-family="sans-serif">❌ 全量加载→上下文膨胀 | 无检索机制</text>
+  <text x="202" y="150" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">偏好、约定、踩坑记录 &lt; 200行场景</text>
+  <rect x="415" y="50" width="365" height="100" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="597" y="78" text-anchor="middle" fill="#60a5fa" font-size="15" font-weight="bold" font-family="sans-serif">向量库记忆</text>
+  <text x="597" y="100" text-anchor="middle" fill="#93c5fd" font-size="11" font-family="sans-serif">✅ 高语义检索 | 按需加载上下文高效</text>
+  <text x="597" y="118" text-anchor="middle" fill="#93c5fd" font-size="11" font-family="sans-serif">✅ 多样化记忆检索 | 复杂多源管理</text>
+  <text x="597" y="138" text-anchor="middle" fill="#fca5a5" font-size="11" font-family="sans-serif">❌ 需维护向量服务 | 专有格式锁定</text>
+  <text x="597" y="150" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">海量非结构化片段 &gt; 1000条场景</text>
+  <!-- Bottom -->
+  <rect x="60" y="170" width="680" height="60" rx="6" fill="#1e293b" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="400" y="192" text-anchor="middle" fill="#c084fc" font-size="12" font-weight="bold" font-family="sans-serif">不是二选一，而是看场景选型</text>
+  <text x="400" y="212" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">信息有限、可读性要求高 → Markdown | 海量非结构化、需语义检索 → 向量库</text>
+  <text x="400" y="228" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">两者可以共存：偏好用 Markdown + 对话历史用向量库</text>
+</svg>

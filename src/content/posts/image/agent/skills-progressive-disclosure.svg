@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 380">
+  <rect width="800" height="380" fill="#0f172a"/>
+  <text x="400" y="30" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">Skills 渐进式披露（Progressive Disclosure）</text>
+  <text x="400" y="52" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">类比：先看目录 → 确定章节 → 翻到具体页</text>
+  <!-- Layer 1 Always in context -->
+  <rect x="40" y="75" width="720" height="70" rx="8" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="60" y="100" text-anchor="middle" fill="#60a5fa" font-size="13" font-weight="bold" font-family="sans-serif">第一层</text>
+  <text x="400" y="100" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">常驻元信息（~20 Token/Skill）</text>
+  <text x="400" y="120" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">name + description + 典型触发词 — 几十个 Skill 加起来也不重</text>
+  <text x="400" y="138" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">Agent 根据元信息判断「当前任务是否命中某个 Skill」</text>
+  <!-- Arrow -->
+  <path d="M400 145 L400 165" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <!-- Layer 2 Load on demand -->
+  <rect x="40" y="170" width="720" height="90" rx="8" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="60" y="195" text-anchor="middle" fill="#fbbf24" font-size="13" font-weight="bold" font-family="sans-serif">第二层</text>
+  <text x="400" y="195" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">按需正文（命中后动态注入上下文）</text>
+  <text x="400" y="215" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">完整 SKILL.md：具体流程 + 约束 + 示例 + 失败处理</text>
+  <text x="400" y="235" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">scripts/、references/、runbooks/ 等附件也可按需加载</text>
+  <text x="400" y="253" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">任务中途暴露出新需求时，可补充加载额外 Skill</text>
+  <!-- Comparison -->
+  <rect x="40" y="280" width="340" height="55" rx="6" fill="#1e293b" stroke="#ef4444" stroke-width="1"/>
+  <text x="210" y="305" text-anchor="middle" fill="#fca5a5" font-size="12" font-family="sans-serif">❌ 全量加载：几十份正文全塞上下文</text>
+  <text x="210" y="325" text-anchor="middle" fill="#fca5a5" font-size="11" font-family="sans-serif">→ 噪声淹没关键信息 → Lost in the Middle</text>
+  <rect x="420" y="280" width="340" height="55" rx="6" fill="#1e293b" stroke="#10b981" stroke-width="1"/>
+  <text x="590" y="305" text-anchor="middle" fill="#86efac" font-size="12" font-family="sans-serif">✅ 渐进式披露：轻量目录 + 按需正文</text>
+  <text x="590" y="325" text-anchor="middle" fill="#86efac" font-size="11" font-family="sans-serif">→ 上下文干净 → 推理精准 → Token 节省</text>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+  </defs>
+</svg>

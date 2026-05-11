@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 260">
+  <rect width="800" height="260" fill="#0f172a"/>
+  <text x="400" y="28" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">Workflow、Graph、Loop 三者关系</text>
+  <text x="400" y="48" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">Workflow 是目标与过程，Graph 是结构与载体，Loop 是图上的控制模式</text>
+  <!-- Boxes -->
+  <rect x="30" y="70" width="230" height="80" rx="12" fill="#3b82f6"/>
+  <text x="145" y="100" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold" font-family="sans-serif">Workflow</text>
+  <text x="145" y="120" text-anchor="middle" fill="#bfdbfe" font-size="11" font-family="sans-serif">目标与过程</text>
+  <text x="145" y="138" text-anchor="middle" fill="#bfdbfe" font-size="11" font-family="sans-serif">"这件事怎么做完?"</text>
+  <rect x="285" y="70" width="230" height="80" rx="12" fill="#8b5cf6"/>
+  <text x="400" y="100" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold" font-family="sans-serif">Graph</text>
+  <text x="400" y="120" text-anchor="middle" fill="#ddd6fe" font-size="11" font-family="sans-serif">结构与载体</text>
+  <text x="400" y="138" text-anchor="middle" fill="#ddd6fe" font-size="11" font-family="sans-serif">Node + Edge + State</text>
+  <rect x="540" y="70" width="230" height="80" rx="12" fill="#f59e0b"/>
+  <text x="655" y="100" text-anchor="middle" fill="#fff" font-size="16" font-weight="bold" font-family="sans-serif">Loop</text>
+  <text x="655" y="120" text-anchor="middle" fill="#fef3c7" font-size="11" font-family="sans-serif">控制模式</text>
+  <text x="655" y="138" text-anchor="middle" fill="#fef3c7" font-size="11" font-family="sans-serif">回边 + 条件 + 安全边界</text>
+  <!-- Example -->
+  <rect x="30" y="170" width="740" height="75" rx="6" fill="#1e293b"/>
+  <text x="400" y="192" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="sans-serif">同一件事的三个观察角度</text>
+  <text x="400" y="212" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">说「生成初稿→审核→不达标就修改→再审核，达标输出」→ 这是 Workflow</text>
+  <text x="400" y="230" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">画成节点连线，共享 State → 这是 Graph | 审核不过回到修改 → 这是 Loop</text>
+</svg>

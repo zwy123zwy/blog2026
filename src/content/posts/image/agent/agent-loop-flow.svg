@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f172a"/><stop offset="1" stop-color="#1e293b"/></linearGradient>
+  </defs>
+  <rect width="800" height="520" fill="url(#bg)"/>
+  <text x="400" y="38" text-anchor="middle" fill="#fff" font-size="20" font-weight="bold" font-family="sans-serif">Agent Loop 工作流程</text>
+  <text x="400" y="60" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="sans-serif">while 循环：LLM 推理 → 工具调用 → 上下文更新 → 判断终止</text>
+  <!-- Step boxes -->
+  <rect x="250" y="85" width="300" height="50" rx="8" fill="#3b82f6"/>
+  <text x="400" y="108" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="sans-serif">① 初始化：加载 System Prompt + 工具列表 + 用户请求</text>
+  <text x="400" y="125" text-anchor="middle" fill="#bfdbfe" font-size="11" font-family="sans-serif"/>
+  <path d="M400 135 L400 155" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="250" y="160" width="300" height="50" rx="8" fill="#8b5cf6"/>
+  <text x="400" y="183" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="sans-serif">② LLM 推理：决定下一步（调工具/直接回复）</text>
+  <text x="400" y="200" text-anchor="middle" fill="#ddd6fe" font-size="11" font-family="sans-serif"/>
+  <path d="M400 210 L400 230" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="250" y="235" width="300" height="50" rx="8" fill="#f59e0b"/>
+  <text x="400" y="258" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="sans-serif">③ 工具执行：调用 API / 读文件 / 执行代码</text>
+  <text x="400" y="275" text-anchor="middle" fill="#fef3c7" font-size="11" font-family="sans-serif"/>
+  <path d="M400 285 L400 305" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="250" y="310" width="300" height="50" rx="8" fill="#10b981"/>
+  <text x="400" y="333" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="sans-serif">④ 上下文更新：结果追加到上下文窗口</text>
+  <text x="400" y="350" text-anchor="middle" fill="#d1fae5" font-size="11" font-family="sans-serif"/>
+  <path d="M400 360 L400 380" stroke="#64748b" stroke-width="2" marker-end="url(#a)"/>
+  <!-- Decision diamond -->
+  <polygon points="400,385 500,430 400,475 300,430" fill="#ef4444" rx="4"/>
+  <text x="400" y="425" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold" font-family="sans-serif">任务完成?</text>
+  <text x="400" y="442" text-anchor="middle" fill="#fecaca" font-size="10" font-family="sans-serif">或超轮次/Token</text>
+  <!-- Continue loop -->
+  <path d="M300 430 L200 430 L200 185 L250 185" fill="none" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6,3" marker-end="url(#a)"/>
+  <text x="185" y="310" fill="#f59e0b" font-size="11" font-family="sans-serif" transform="rotate(-90 185 310)">继续循环</text>
+  <!-- Exit -->
+  <path d="M500 430 L590 430" stroke="#10b981" stroke-width="2" marker-end="url(#ag)"/>
+  <rect x="595" y="408" width="150" height="44" rx="8" fill="#10b981"/>
+  <text x="670" y="435" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold" font-family="sans-serif">⑤ 退出，返回结果</text>
+  <!-- Safety note -->
+  <rect x="30" y="470" width="740" height="35" rx="6" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="400" y="493" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">🔒 安全兜底：最大迭代 10~20 轮 | Token 消耗阈值 | 超时强制退出</text>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#64748b"/></marker>
+    <marker id="ag" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#10b981"/></marker>
+  </defs>
+</svg>

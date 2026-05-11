@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 250">
+  <rect width="800" height="250" fill="#0f172a"/>
+  <text x="400" y="28" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">长期记忆 vs RAG（检索增强生成）</text>
+  <rect x="25" y="50" width="360" height="100" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="205" y="78" text-anchor="middle" fill="#60a5fa" font-size="15" font-weight="bold" font-family="sans-serif">RAG 知识库</text>
+  <text x="205" y="100" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">挂载共享知识源</text>
+  <text x="205" y="118" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">公司规章、产品文档、API手册</text>
+  <text x="205" y="136" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">非个性化：所有用户返回相同内容</text>
+  <text x="205" y="152" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">回答"世界是什么样的"</text>
+  <rect x="415" y="50" width="360" height="100" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <text x="595" y="78" text-anchor="middle" fill="#34d399" font-size="15" font-weight="bold" font-family="sans-serif">长期记忆</text>
+  <text x="595" y="100" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">管理个性化经验</text>
+  <text x="595" y="118" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">用户偏好、习惯、历史决策</text>
+  <text x="595" y="136" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">高度个性化：因人而异</text>
+  <text x="595" y="152" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">回答"这个用户是什么样的"</text>
+  <!-- Bottom -->
+  <rect x="40" y="170" width="720" height="60" rx="6" fill="#1e293b" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="400" y="192" text-anchor="middle" fill="#c084fc" font-size="12" font-weight="bold" font-family="sans-serif">两者协作而非二选一</text>
+  <text x="400" y="212" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">RAG 提供「世界知识」+ 长期记忆提供「用户画像」→ 分别召回后融合排序 → 个性化答案</text>
+  <text x="400" y="228" text-anchor="middle" fill="#64748b" font-size="10" font-family="sans-serif">用户偏好可作为 RAG 结果的个性化重排信号</text>
+</svg>

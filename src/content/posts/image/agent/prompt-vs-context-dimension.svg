@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 320">
+  <rect width="800" height="320" fill="#0f172a"/>
+  <text x="400" y="28" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">Prompt Engineering vs Context Engineering</text>
+  <!-- PE -->
+  <rect x="40" y="50" width="350" height="120" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="215" y="78" text-anchor="middle" fill="#60a5fa" font-size="15" font-weight="bold" font-family="sans-serif">Prompt Engineering</text>
+  <text x="215" y="100" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif">核心问题：怎么措辞、怎么排列</text>
+  <text x="215" y="120" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">关注点：指令本身的撰写</text>
+  <text x="215" y="140" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">作用：塑造局部概率空间</text>
+  <text x="215" y="160" text-anchor="middle" fill="#64748b" font-size="11" font-family="sans-serif">类比：教厨师做菜的一句口诀</text>
+  <!-- CE -->
+  <rect x="410" y="50" width="350" height="120" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <text x="585" y="78" text-anchor="middle" fill="#34d399" font-size="15" font-weight="bold" font-family="sans-serif">Context Engineering</text>
+  <text x="585" y="100" text-anchor="middle" fill="#fff" font-size="11" font-family="sans-serif">核心问题：什么信息、什么格式、什么时机</text>
+  <text x="585" y="120" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">关注点：动态系统的构建</text>
+  <text x="585" y="140" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">作用：确保正确信息在合适时机出现</text>
+  <text x="585" y="160" text-anchor="middle" fill="#64748b" font-size="11" font-family="sans-serif">类比：配备齐全的厨房</text>
+  <!-- Comparison table -->
+  <rect x="40" y="185" width="720" height="120" rx="6" fill="#1e293b"/>
+  <text x="400" y="212" text-anchor="middle" fill="#fff" font-size="12" font-weight="bold" font-family="sans-serif">核心差异</text>
+  <line x1="60" y1="222" x2="740" y2="222" stroke="#334155" stroke-width="1"/>
+  <text x="120" y="245" text-anchor="middle" fill="#60a5fa" font-size="11" font-family="sans-serif">Prompt Engineering = LLM 的「用户手册」</text>
+  <text x="400" y="245" text-anchor="middle" fill="#64748b" font-size="11" font-family="sans-serif">告诉模型「做什么」和「怎么做」</text>
+  <text x="120" y="268" text-anchor="middle" fill="#34d399" font-size="11" font-family="sans-serif">Context Engineering = LLM 的「内存管理 + 页面置换」</text>
+  <text x="400" y="268" text-anchor="middle" fill="#64748b" font-size="11" font-family="sans-serif">决定上下文窗口里装什么、换出什么、什么时候读写</text>
+  <text x="400" y="295" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">两者不是二选一，而是嵌套协作：Context Engineering 包含 Prompt 的组装时机和方式</text>
+</svg>

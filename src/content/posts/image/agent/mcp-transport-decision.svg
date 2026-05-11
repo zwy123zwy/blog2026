@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300">
+  <rect width="800" height="300" fill="#0f172a"/>
+  <text x="400" y="30" text-anchor="middle" fill="#fff" font-size="18" font-weight="bold" font-family="sans-serif">MCP 传输方式选择</text>
+  <rect x="40" y="55" width="340" height="150" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="2"/>
+  <text x="210" y="85" text-anchor="middle" fill="#60a5fa" font-size="15" font-weight="bold" font-family="sans-serif">stdio（标准输入/输出）</text>
+  <text x="210" y="110" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">本地进程间通信</text>
+  <text x="210" y="130" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">Host 启动 MCP Server 作为子进程</text>
+  <text x="210" y="155" text-anchor="middle" fill="#86efac" font-size="11" font-family="sans-serif">✅ 极度轻量、零网络开销</text>
+  <text x="210" y="175" text-anchor="middle" fill="#fca5a5" font-size="11" font-family="sans-serif">⚠ 权限边界需额外设计</text>
+  <text x="210" y="195" text-anchor="middle" fill="#64748b" font-size="11" font-family="sans-serif">适用：本地开发（Claude Desktop/VS Code）</text>
+  <rect x="420" y="55" width="340" height="150" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="2"/>
+  <text x="590" y="85" text-anchor="middle" fill="#34d399" font-size="15" font-weight="bold" font-family="sans-serif">Streamable HTTP（推荐生产）</text>
+  <text x="590" y="110" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">2025.03 引入，替代 HTTP+SSE</text>
+  <text x="590" y="130" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="sans-serif">统一端点 POST /mcp，独立鉴权</text>
+  <text x="590" y="155" text-anchor="middle" fill="#86efac" font-size="11" font-family="sans-serif">✅ 每请求独立鉴权、兼容负载均衡</text>
+  <text x="590" y="175" text-anchor="middle" fill="#fca5a5" font-size="11" font-family="sans-serif">⚠ 需要网络基础设施</text>
+  <text x="590" y="195" text-anchor="middle" fill="#64748b" font-size="11" font-family="sans-serif">适用：远程部署、生产环境</text>
+  <rect x="200" y="230" width="400" height="40" rx="6" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+  <text x="400" y="255" text-anchor="middle" fill="#94a3b8" font-size="12" font-family="sans-serif">选型建议：本地开发用 stdio → 生产环境用 Streamable HTTP</text>
+</svg>
