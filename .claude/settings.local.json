@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:javaguide.cn)",
+      "WebSearch",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/agent/agent-core-arch\\\\.png|./image/agent/agent-core-arch.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/agent/agent-loop-flow\\\\.png|./image/agent/agent-loop-flow.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/agent/ReAct-LLM\\\\.png|./image/agent/react-llm.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/agent/agent-react-flow\\\\.png|./image/agent/agent-react-flow.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/agent/agent-multi-agent-arch\\\\.png|./image/agent/agent-multi-agent-arch.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/llm/llm-context-window\\\\.png|./img/llm-context-window.png|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/context-engineering/context-token-budget-three-level-elimination-strategy\\\\.svg|./image/agent/context-token-budget.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/context-engineering/long-task-context-persistence-three-weapons-against-corruption\\\\.svg|./image/agent/context-persistence-weapons.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/context-engineering/prompt-four-element-framework\\\\.svg|./image/agent/prompt-four-elements.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/context-engineering/prompt-six-core-techniques\\\\.svg|./image/agent/prompt-six-techniques.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/workflow/traditional-vs-ai-workflow\\\\.svg|./image/agent/traditional-vs-ai-workflow.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/workflow/workflow-graph-loop-relation\\\\.svg|./image/agent/workflow-graph-loop-relation.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/workflow/graph-core-elements\\\\.svg|./image/agent/graph-core-elements.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/workflow/loop-mechanism\\\\.svg|./image/agent/loop-mechanism.svg|g' Agent.md)",
+      "Bash(sed -i 's|https://oss.javaguide.cn/github/javaguide/ai/harness/harness-agent-equals-model-harness-arch\\\\.png|./image/agent/harness-agent-model.svg|g' Agent.md)",
+      "Bash(sed -i 's|!\\\\[AI Agent 核心架构\\\\]\\(./image/agent/agent-core-arch.svg\\)|![AI Agent 核心架构]\\(https://oss.javaguide.cn/github/javaguide/ai/agent/agent-core-arch.png\\)\\\\n\\\\n![手绘版]\\(./image/agent/agent-core-arch.svg\\)|g' Agent.md)",
+      "Bash(sed -i 's|!\\\\[Agent Loop 工作流程\\\\]\\(./image/agent/agent-loop-flow.svg\\)|![Agent Loop 工作流程]\\(https://oss.javaguide.cn/github/javaguide/ai/agent/agent-loop-flow.png\\)\\\\n\\\\n![手绘版]\\(./image/agent/agent-loop-flow.svg\\)|g' Agent.md)",
+      "Bash(sed -i 's|!\\\\[ReAct-LLM\\\\]\\(./image/agent/react-llm.svg\\)|![ReAct-LLM]\\(https://oss.javaguide.cn/github/javaguide/ai/agent/ReAct-LLM.png\\)\\\\n\\\\n![手绘版]\\(./image/agent/react-llm.svg\\)|g' Agent.md)",
+      "Bash(sed -i 's|!\\\\[ReAct 模式流程\\\\]\\(./image/agent/agent-react-flow.svg\\)|![ReAct 模式流程]\\(https://oss.javaguide.cn/github/javaguide/ai/agent/agent-react-flow.png\\)\\\\n\\\\n![手绘版]\\(./image/agent/agent-react-flow.svg\\)|g' Agent.md)",
+      "Bash(sed -i 's|!\\\\[Multi-Agent 系统架构\\\\]\\(./image/agent/agent-multi-agent-arch.svg\\)|![Multi-Agent 系统架构]\\(https://oss.javaguide.cn/github/javaguide/ai/agent/agent-multi-agent-arch.png\\)\\\\n\\\\n![手绘版]\\(./image/agent/agent-multi-agent-arch.svg\\)|g' Agent.md)",
+      "Bash(git add:*)",
+      "Bash(git commit -m ':*)",
+      "Bash(git push:*)"
+    ]
+  }
+}
